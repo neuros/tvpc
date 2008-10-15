@@ -1,0 +1,15 @@
+# This is DBUS API, for now, support API is:
+Device API:
+"getProperties",
+"getName",
+"getType",
+"getHalUdi",
+"getIP4Address",
+"getHWAddress",
+"getMode",
+"getActiveNetwork",
+"getNetworks",
+"getLinkActive",
+"setLinkActive",
+"getCapabilities",
+"getDriver",
