@@ -129,7 +129,7 @@ private:
 class NWirelessDetailInfo
 {
 public:
-	friend class NDBusDeviceInterface;
+	friend class NDBusNetworkInterface;
 
 	NWirelessDetailInfo() {
 		op = NULL;
@@ -154,11 +154,11 @@ public:
 	int signalStrength() const {
 		return strength;
 	}
-	float frequency() const {
-		return freq / 1000000000;
+	double frequency() const {
+		return freq;
 	}
 	int bitRate() const {
-		return rate / 1024;
+		return rate;
 	}
 	long capability() const {
 		return capabilities;

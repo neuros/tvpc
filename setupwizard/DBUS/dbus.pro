@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = NDBus-test 
+TARGET = NDBus-test
 DEPENDPATH += .
 INCLUDEPATH += . \
 		/usr/include/dbus-1.0 \
@@ -14,5 +14,5 @@ INCLUDEPATH += . \
 LIBS += -ldbus-glib-1 -ldbus-1 -lrt
 
 # Input
-HEADERS += NDBusConnection.h NDBusCommon.h NDBusDeviceInterface.h
-SOURCES += main.cpp NDBusConnection.cpp NDBusDeviceInterface.cpp
+HEADERS += NDBusConnection.h NDBusCommon.h NDBusDeviceInterface.h NDBusBaseInterface.h NDBusNetworkInterface.h NDBusNetworkManagerInterface.h
+SOURCES += main.cpp NDBusConnection.cpp NDBusDeviceInterface.cpp NDBusBaseInterface.cpp NDBusNetworkInterface.cpp NDBusNetworkManagerInterface.cpp

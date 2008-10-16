@@ -2,19 +2,24 @@
 #include <QDebug>
 #include "NDBusConnection.h"
 #include "NDBusDeviceInterface.h"
+#include "NDBusNetworkInterface.h"
+#include "NDBusNetworkManagerInterface.h"
 
 static void showNetworkInfo(const NDBusDeviceInterface &iface)
 {
 	NNetworkProperty property;
 	NWirelessDetailInfo info;
 
+	NDBusNetworkInterface nface(NDBusConnection::systemBus());
+	NDBusNetworkManagerInterface nmface(NDBusConnection::systemBus());
+
 	const char *state_string = NULL;
 	const char *enc_string = NULL;
-	QStringList devicesList = iface.getDevices();
+	QStringList devicesList = nmface.getDevices();
 
 	qDebug() << "\nNetworkManager Tool\n";
 
-	switch (iface.getNetworkManagerState())
+	switch (iface.state())
 	{
 		case NM_STATE_ASLEEP:
 			state_string = "asleep";
@@ -41,7 +46,8 @@ static void showNetworkInfo(const NDBusDeviceInterface &iface)
 	qDebug() << "State: "<< state_string << "\n";
 
 	for (int i=0; i<devicesList.count(); i++) {
-		property = iface.getDeviceDetail(devicesList.at(i));
+
+		property = iface.getProperties(devicesList.at(i));
 
 		qDebug() << "- Device:"<< property.deviceName().toAscii().data() << "----------------------------------------------------------------";
 		qDebug() << "  NM Path:          " << property.networkPath().toAscii().data();
@@ -51,7 +57,7 @@ static void showNetworkInfo(const NDBusDeviceInterface &iface)
 		else if (property.deviceType() == DEVICE_TYPE_802_3_ETHERNET)
 			qDebug() << "  Type:              Wired";
 
-		qDebug() << "  Driver:           " << iface.getDriverName(devicesList.at(i)).toAscii().data();
+		qDebug() << "  Driver:           " << iface.getDriver(devicesList.at(i)).toAscii().data();
 
 		if (property.deviceActive() == true)
 			qDebug() << "  Active:            yes";
@@ -87,8 +93,7 @@ static void showNetworkInfo(const NDBusDeviceInterface &iface)
 
 			qDebug() << "\n  Wireless Networks (* = Current Network)";
 			for (int i =0; i<property.wirelessNetworks().count(); i++) {
-				info = iface.getWirelessNetworkInfo(property.wirelessNetworks().at(i));
-
+				info = nface.getProperties(property.wirelessNetworks().at(i));
                  if (info.capability() & NM_802_11_CAP_PROTO_WEP)
                      enc_string = "WEP";
                  if (info.capability()  & NM_802_11_CAP_PROTO_WPA)
@@ -100,7 +105,7 @@ static void showNetworkInfo(const NDBusDeviceInterface &iface)
 
 				qDebug() <<((property.wirelessNetworks().at(i) == property.activeNetworkPath() ? "    *":"     ") +
 					info.ESSID() +":       ").toAscii().data() << (((info.operationMode() == IW_MODE_INFRA) ? "Infrastructure" : "Ad-Hoc") + 
-					QString(" Mode, Freq")).toAscii().data() <<info.frequency() <<"MHz, Rate" << info.bitRate() << "Mb/s, Strength"<<
+					QString(" Mode, Freq")).toAscii().data() <<info.frequency()/1000000000 <<"MHz, Rate" << info.bitRate()/1024 << "Mb/s, Strength"<<
 					info.signalStrength() <<"%," << ((enc_string == NULL ? "" : "Encrypted (") + QString(enc_string) + ")").toAscii().data();
 
 			}
@@ -126,6 +131,7 @@ static void showNetworkInfo(const NDBusDeviceInterface &iface)
 		}
 		qDebug() <<"\n";
 	}
+
 }
 
 int main(int argc, char *argv[])

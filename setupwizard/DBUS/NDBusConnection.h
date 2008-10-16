@@ -8,13 +8,16 @@
 
 class NDBusConnection
 {
-	friend class NDBusDeviceInterface;
+	friend class NDBusBaseInterface;
 public:
 	static NDBusConnection systemBus();
 	static NDBusConnection sessionBus();
 	bool isConnected() const;
 	bool isValid() const {
 		return connection != NULL;
+	}
+	DBusConnection *dbusConnection() const {
+		return connection;
 	}
 protected:
 	DBusConnection	*connection;

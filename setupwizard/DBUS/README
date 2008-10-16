@@ -1,13 +1,13 @@
 # This is DBUS API, for now, support API is:
-Device API:
-"getProperties",
-"getName",
-"getType",
-"getHalUdi",
-"getIP4Address",
-"getHWAddress",
-"getMode",
-"getActiveNetwork",
+Device API:                     Network API:                      NetworkManager API
+"getProperties",              "getProperties",                    "getDevices",
+"getName",                    "getName",
+"getType",                    "getAddress",
+"getHalUdi",                  "getStrength",
+"getIP4Address",              "getRate",
+"getHWAddress",               "getMode",
+"getMode",                    "getFrequency",OA
+"getActiveNetwork",           "getEncrypted",
 "getNetworks",
 "getLinkActive",
 "setLinkActive",
