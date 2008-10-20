@@ -1,27 +1,33 @@
-#include "NNetworkManager.h"
-#include "NNetworkState.h"
 #include <QApplication>
-int main(int argc, char *argv[])
+#include "NNetworkTools.h"
+
+int main()
 {
-	QApplication app(argc, argv);
-	NNetworkManager m;
+	NNetworkTools tools;
+	NDevice *dev;
+	NNetworkList netlist;
+	NNetwork *net;
+	qDebug() << NNetworkState::getInstance()->isConnected();
+	dev = NNetworkManager::getInstance()->getActiveDevice();
 
+	net = dev->getActiveNetwork();
+	qDebug() << net->getEssid();
+	qDebug() << net->getEncryptionProtocol();
+	//NNetworkManager::networkRefresh();
+//	for (int i=0; i<netlist.count(); i++) {
+	//	netlist.at(i)->updateNetworkInfo();
+	//	qDebug() << netlist.at(i)->getHardwareAddress();
+	//	qDebug() << netlist.at(i)->getRate();
+	//}
+	//NDeviceList list = NNetworkManager::getInstance()->getDevices();
 
-/*
-     NNetworkState::getInstance()->setOfflineMode(false);
-     NNetworkState::getInstance()->setWirelessState(false);
-     qDebug() << NNetworkState::getInstance()->isNetworkManagerRunning();
-     qDebug() << NNetworkState::getInstance()->isConnected();
-     qDebug() << NNetworkState::getInstance()->isConnecting();
-     qDebug() << NNetworkState::getInstance()->isSleeping();
-     qDebug() << NNetworkState::getInstance()->isDisconnected();
-     qDebug() << NNetworkState::getInstance()->isWirelessEnabled();
-     qDebug() << NNetworkState::getInstance()->isWirelessEnabled();
-     NNetworkState::getInstance()->setWirelessState(true);
-     qDebug() <<NNetworkState::getInstance()->stateToString();
-     qDebug() << NNetworkState::getInstance()->isWirelessEnabled();
-     NNetworkState::getInstance()->setOfflineMode(false);
-     qDebug() << NNetworkState::getInstance()->isSleeping();
-*/
+	//for (int i=0; i< list.count(); i++) {
+		//qDebug() << list.at(i)->getVendor();
+		//qDebug() << list.at(i)->setLinkActive(
+		//qDebug() << list.at(i)->getLinkActive();
+	//}
+
+	//NNetworkManager::getInstance()->setActiveDevice(list.at(0));
+	//qDebug() << NNetworkManager::getInstance()->getActiveDevice()->getObjectPath();
 	return 1;
 }

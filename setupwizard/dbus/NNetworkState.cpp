@@ -169,12 +169,16 @@ const QString NNetworkState::stateToString() const
 	return stateString;
 }
 
-void NNetworkState::push(NNetworkManager *ctx)
+void NNetworkState::updateNetworkState(void)
+{
+	/* get NetworkManager state */
+    NStateDBusInterface::getState ();
+	NStateDBusInterface::getWirelessState ();
+}
+
+void NNetworkState::push(NNetworkTools *ctx)
 {
 	_ctx = ctx;
 	NStateDBusInterface::push (ctx);
-
-	/* get NetworkManager state */
-	NStateDBusInterface::getState ();
-	NStateDBusInterface::getWirelessState ();
+	updateNetworkState();
 }

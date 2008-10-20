@@ -1,22 +1,29 @@
 #ifndef _NNETWORK_MANAGER_H__
 #define _NNETWORK_MANAGER_H__
-#include <QDebug>
-#include "NDBusConnection.h"
-#include "NNetworkState.h"
+#include "NDevice.h"
+
+class NNetworkTools;
 
 class NNetworkManager
 {
 public:
-	NNetworkManager(void);
-    NDBusConnection*     getDBus (void);
-	NNetworkState *getState(void);
-	//NetworkManagerInfo* getNetworkManagerInfo (void);
+	NNetworkManager();
+	~NNetworkManager();
 
+	static NNetworkManager *getInstance(void);
+	static void networkRefresh(void);
+
+	NDeviceList getDevices(void);
+	NDevice *getActiveDevice(void);
+	void setActiveDevice(NDevice *dev);
+
+	void setupDevices(char **path, int num);
+	void push(NNetworkTools *ctx);
 private:
-	NDBusConnection*     _dbus;
-	NNetworkState*              _state;
+	static NNetworkManager *_device_instance;
+	NNetworkTools *_ctx;
 
-	//NNetworkManagerInfo *_nmi;
+	NDeviceList  _device_list;
+
 };
-
-#endif
+#endif /* _NNETWORK_MANAGER_H__ */

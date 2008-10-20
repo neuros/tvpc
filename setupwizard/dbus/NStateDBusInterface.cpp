@@ -1,7 +1,6 @@
 #include "NStateDBusInterface.h"
-#include "NNetworkManager.h"
-
-NNetworkManager *NStateDBusInterface::_ctx = NULL;
+#include "NNetworkTools.h"
+NNetworkTools *NStateDBusInterface::_ctx = NULL;
 
 void NStateDBusInterface::enableWireless (bool set)
 {
@@ -147,7 +146,7 @@ void NStateDBusInterface::getWirelessState (void)
 	return ;
 }
 
-void NStateDBusInterface::push (NNetworkManager* ctx)
+void NStateDBusInterface::push (NNetworkTools* ctx)
 {
 	NStateDBusInterface::_ctx = ctx;
 }

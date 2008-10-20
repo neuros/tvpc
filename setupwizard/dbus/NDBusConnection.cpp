@@ -1,10 +1,14 @@
 #include "NDBusConnection.h"
-#include <QTimer>
 
-NNetworkManager* NDBusConnection::_ctx = NULL;
+NNetworkTools* NDBusConnection::_ctx = NULL;
 DBusConnection*  NDBusConnection::_dbus_connection = NULL;
 
 NDBusConnection::NDBusConnection(void)
+{
+
+}
+
+NDBusConnection::~NDBusConnection()
 {
 
 }
@@ -19,7 +23,7 @@ bool NDBusConnection::open ()
 	_dbus_connection = NULL;
 	_dbus_connection = dbus_bus_get (DBUS_BUS_SYSTEM, &error);
 	if ((_dbus_connection == NULL) || (dbus_error_is_set (&error))) {
-		printf ("Connection to D-Bus system message bus failed:\n%s.\n", error.message);
+		qDebug() << "Connection to D-Bus system message bus failed:\n" << error.message;
 		status = false;
 		goto out;
 	} else {
@@ -34,7 +38,7 @@ out:
 		dbus_error_free (&error);
 	}
 
-	return false;
+	return status;
 }
 
 void NDBusConnection::close (void)
@@ -69,21 +73,6 @@ bool NDBusConnection::registerObjectPath () const
  	}
 
 	return true;
-// 	bool status;
-// 	DBusObjectPathVTable vtable = { NULL, NULL, NULL, NULL, NULL, NULL }; /* fix */
-//
-// 	if (dbus_connection_register_object_path (_dbus_connection, NM_DBUS_PATH, &vtable, _ctx)) {
-// 		status = true;
-// 		goto out;
-//
-// 	} else {
-// 		printf ("Failed to register message handler.\n");
-// 		status = false;
-// 		goto out;
-// 	}
-//
-// out:
-// 	return status;
 }
 
 bool NDBusConnection::addMatch (void)
@@ -130,28 +119,8 @@ out:
 }
 
 
-bool NDBusConnection::addFilter (void)
-{
-	bool status = true;
 
-	if (_ctx == NULL) {
-		printf ("context is NULL\n");
-		status = false;
-	}
-
-// 	if (dbus_connection_add_filter (_dbus_connection, filterFunction, _ctx, NULL)) {
-// 		status = true;
-// 		goto out;
-// 	} else {
-// 		printf ("Failed to add filter function.\n");
-// 		status = false;
-// 		goto out;
-// 	}
-
-	return status;
-}
-
-bool NDBusConnection::push(NNetworkManager *ctx)
+bool NDBusConnection::push(NNetworkTools *ctx)
 {
 	NDBusConnection::_ctx = ctx;
 
@@ -161,11 +130,6 @@ bool NDBusConnection::push(NNetworkManager *ctx)
 
 	if (this->registerObjectPath () == false) {
 		printf ("Register object path failed. Bailing out.\n");
-		goto out;
-	}
-
-	if (this->addFilter () == false) {
-		printf ("Adding filters failed. Bailing out.\n");
 		goto out;
 	}
 

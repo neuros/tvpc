@@ -1,7 +1,7 @@
 #ifndef _NSTATE_DBUS_INTERFACE_H__
 #define _NSTATE_DBUS_INTERFACE_H__
 #include "NDBusConnection.h"
-class NNetworkManager;
+class NNetworkTools;
 
 class NStateDBusInterface
 {
@@ -16,10 +16,10 @@ public:
 	static void setWirelessState(bool);
 	static void getWirelessState(void);
 
-	static void push                    (NNetworkManager*);
+	static void push                    (NNetworkTools*);
 
 private:
-	static NNetworkManager* _ctx;
+	static NNetworkTools* _ctx;
 };
 
 #endif /* _NSTATE_DBUS_INTERFACE_H__ */

@@ -3,7 +3,7 @@
 #include "NDBusConnection.h"
 #include <QObject>
 
-class NNetworkManager;
+class NNetworkTools;
 
 class NNetworkState : public QObject
 {
@@ -32,9 +32,10 @@ public:
 	void setState(NMState);
 	void setWaitingForKey(bool);
 
+	void updateNetworkState(void);
 	NMState  getConnectionState(void);
 
-	void push(NNetworkManager*);
+	void push(NNetworkTools*);
 
 	const QString stateToString() const;
  	signals:
@@ -47,7 +48,7 @@ public:
  	void sleeping();
 
 private:
-	NNetworkManager* _ctx;
+	NNetworkTools* _ctx;
 	static NNetworkState* _instance;
 	/* connection state */
 	NMState _connectionState;

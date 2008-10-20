@@ -7,7 +7,7 @@
 #include <dbus/dbus-glib.h>
 #include <NetworkManager.h>
 
-class NNetworkManager;
+class NNetworkTools;
 
 class NDBusConnection
 {
@@ -16,12 +16,11 @@ public:
 	~NDBusConnection (void);
 
 	bool registerObjectPath(void) const;
-	bool addFilter(void);
 	bool addMatch(void);
     bool open(void);
 	void close(void);
 
-	bool  push(NNetworkManager*);
+	bool  push(NNetworkTools*);
 	void pop(void);
     bool status(void) const {
 		return _initialized;
@@ -31,7 +30,7 @@ public:
 		return _dbus_connection;
 	}
 private:
-	static NNetworkManager *_ctx;
+	static NNetworkTools *_ctx;
 	static DBusConnection *_dbus_connection;
 	bool _initialized;
 

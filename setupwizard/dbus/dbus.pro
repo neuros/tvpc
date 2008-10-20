@@ -15,8 +15,28 @@ INCLUDEPATH += . \
                 /usr/include/glib-2.0 \
                 /usr/lib/glib-2.0/include \
                 /usr/local/include/NetworkManager
-LIBS += -ldbus-glib-1 -ldbus-1 -lrt
+LIBS += -ldbus-glib-1 -ldbus-1 -lrt -lhal
 
 # Input
-HEADERS += NNetworkManager.h NDBusConnection.h NStateDBusInterface.h NNetworkState.h
-SOURCES += main.cpp NNetworkManager.cpp NDBusConnection.cpp NStateDBusInterface.cpp NNetworkState.cpp
+HEADERS += NNetworktools.h \
+	   NDBusConnection.h \
+	   NNetworkState.h \
+	   NStateDBusInterface.h \
+	   NNetworkManager.h \
+	   NNetworkManagerDBusInterface.h \
+	   NDevice.h \
+	   NDeviceDBusInterface.h \
+	   NNetwork.h \
+	   NNetworkDBusInterface.h \
+ 
+SOURCES += main.cpp \
+	   NNetworktools.cpp \
+	   NDBusConnection.cpp \
+	   NNetworkState.cpp \
+	   NStateDBusInterface.cpp \
+	   NNetworkManagerDBusInterface.cpp \
+	   NNetworkManager.cpp \
+	   NDevice.cpp \
+	   NDeviceDBusInterface.cpp \
+	   NNetwork.cpp \
+	   NNetworkDBusInterface.cpp \
