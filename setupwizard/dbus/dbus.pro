@@ -15,7 +15,7 @@ INCLUDEPATH += . \
                 /usr/include/glib-2.0 \
                 /usr/lib/glib-2.0/include \
                 /usr/local/include/NetworkManager
-LIBS += -ldbus-glib-1 -ldbus-1 -lrt -lhal
+LIBS += -ldbus-glib-1 -ldbus-1 -lrt -lhal -lnm-util
 
 # Input
 HEADERS += NNetworktools.h \
@@ -28,6 +28,7 @@ HEADERS += NNetworktools.h \
 	   NDeviceDBusInterface.h \
 	   NNetwork.h \
 	   NNetworkDBusInterface.h \
+	   NEncryption.h \
  
 SOURCES += main.cpp \
 	   NNetworktools.cpp \
@@ -40,3 +41,4 @@ SOURCES += main.cpp \
 	   NDeviceDBusInterface.cpp \
 	   NNetwork.cpp \
 	   NNetworkDBusInterface.cpp \
+	   NEncryption.cpp \

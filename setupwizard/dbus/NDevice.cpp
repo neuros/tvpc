@@ -346,6 +346,11 @@ NNetwork *NDevice::getActiveNetwork() const
 	return NULL;
 }
 
+void NDevice::activeNetwork(NNetwork *net)
+{
+	NDeviceDBusInterface::setActiveNetwork(net, this);
+}
+
 void NDevice::setupNetworks(char **networks, int num_networks)
 {
 	NNetwork *net;

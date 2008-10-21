@@ -5,6 +5,7 @@
 #include <hal/libhal.h>
 
 class NNetworkTools;
+class NNetwork;
 
 class NDeviceDBusInterface
 {
@@ -12,6 +13,8 @@ public:
 	static void setHalDeviceInfo (NDevice *dev);
 
 	static void getProperties(const QString &path, NDevice *device);
+
+	static void setActiveNetwork(NNetwork *net, NDevice  *dev);
 
 	static void push(NNetworkTools *ctx);
 private:

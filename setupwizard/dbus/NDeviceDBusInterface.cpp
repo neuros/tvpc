@@ -1,5 +1,6 @@
 #include "NDeviceDBusInterface.h"
 #include "NNetworkTools.h"
+#include "NNetwork.h"
 
 NNetworkTools *NDeviceDBusInterface::_ctx = NULL;
 
@@ -183,6 +184,38 @@ void NDeviceDBusInterface::getProperties(const QString &path,
 
 	dbus_message_unref (reply);
 	return;
+}
+
+void NDeviceDBusInterface::setActiveNetwork(NNetwork *net, NDevice *dev)
+{
+	DBusMessage*    msg   = NULL;
+	DBusConnection* con   = _ctx->getDBus ()->getConnection ();
+	NEncryption*     enc   = net->getEncryption ();
+	const char *    essid = net->getEssid ().toUtf8().data();
+
+	if (!con || !dev || !essid) {
+		return;
+	}
+
+	msg = dbus_message_new_method_call (NM_DBUS_SERVICE, NM_DBUS_PATH, NM_DBUS_INTERFACE, "setActiveDevice");
+	if (msg) {
+		const char* obj_path   = dev->getObjectPath ().toUtf8().data();
+		const char* essid      = net->getEssid ().toUtf8().data();
+
+		dbus_message_append_args (msg, DBUS_TYPE_OBJECT_PATH, &obj_path,
+					       DBUS_TYPE_STRING,      &essid, DBUS_TYPE_INVALID);
+
+		if (enc) {
+			enc->serialize (msg, essid);
+		}
+
+		dbus_connection_send (con, msg, NULL);
+
+		dbus_message_unref (msg);
+	}
+
+	return;
+
 }
 
 void NDeviceDBusInterface::push(NNetworkTools *ctx)

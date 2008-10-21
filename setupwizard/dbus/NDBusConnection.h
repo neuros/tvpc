@@ -1,6 +1,5 @@
 #ifndef _NDBUS_CONNECTION_H__
 #define _NDBUS_CONNECTION_H__
-#include <QObject>
 #include <QDebug>
 #include <dbus/dbus.h>
 #include <dbus/dbus-glib-lowlevel.h>
@@ -33,8 +32,6 @@ private:
 	static NNetworkTools *_ctx;
 	static DBusConnection *_dbus_connection;
 	bool _initialized;
-
-	//static DBusHandlerResult filterFunction                   (DBusConnection*, DBusMessage*, void*);
 };
 
 #endif

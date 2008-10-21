@@ -7,15 +7,13 @@ NNetwork::NNetwork (const QString & obj_path, NDevice *dev):/* _encryption (0),*
 		  _strength (0), _frequency (0), _rate (0), _active( false ), _mode (0),
 		  _capabilities( NM_DEVICE_CAP_NONE ),  _dev(dev)
 {
-	//qDebug() << obj_path;
-	//_encryption = new EncryptionNone ();
-	//_encryption->setNNetwork(this);
-	//_dirty = true;
+	_encryption = new NEncryptionNone ();
+	_encryption->setNetwork(this);
 }
 
 NNetwork::~NNetwork ()
 {
-	//delete _encryption;
+	delete _encryption;
 }
 
 void NNetwork::setDevice(NDevice *dev)
@@ -57,42 +55,6 @@ const QString NNetwork::getHardwareAddress() const
 {
 	return _hw_address;
 }
-
-// void NNetwork::insertHardwareAddress (const QString & hw_address, bool isActiveAddress)
-// {
-// 	if ( hw_address != "00:00:00:00:00:00" ) {
-// 		if ( _hw_addresses.find( hw_address ) == _hw_addresses.end() ) {
-// 			_hw_addresses.append( hw_address );
-// 			_dirty = true;
-// 		}
-// 		if ( isActiveAddress) {
-// 			_active_hw_address = hw_address;
-// 		}
-// 	}
-// }
-
-// void
-// NNetwork::removeHardwareAddress (const QString & hw_address)
-// {
-// 	QStringList::Iterator it = _hw_addresses.find( hw_address );
-// 	if ( it != _hw_addresses.end() ) {
-// 		_hw_addresses.remove( it );
-// 		_dirty = true;
-// 	}
-// }
-
-// const QStringList NNetwork::getHardwareAddresses () const
-// {
-// 	return _hw_addresses;
-// }
-
-// const QString NNetwork::getActiveHardwareAddress()
-// {
-// 	if (_active_hw_address.isEmpty())
-// 		return _hw_addresses.first();
-// 	else
-// 		return _active_hw_address;
-// }
 
 void NNetwork::setStrength (int strength)
 {
@@ -154,21 +116,18 @@ bool NNetwork::isActive () const
 	return _active;
 }
 
-// Encryption*
-// NNetwork::getEncryption (void) const
-// {
-// 	return _encryption;
-// }
-//
-// void
-// NNetwork::setEncryption (Encryption* encryption)
-// {
-// 	_encryption = encryption;
-// 	_dirty = true;
-// 	if ( _encryption )
-// 		_encryption->setNNetwork(this);
-// }
-//
+NEncryption* NNetwork::getEncryption (void) const
+{
+	return _encryption;
+}
+
+void NNetwork::setEncryption (NEncryption* encryption)
+{
+	_encryption = encryption;
+	if ( _encryption )
+		_encryption->setNetwork(this);
+}
+
 const QStringList NNetwork::getEncryptionProtocol () const
 {
 	QStringList encryptionProtocol;

@@ -50,6 +50,7 @@ public:
 	NNetworkList getNetworks(void) const;
 	NNetwork *getActiveNetwork(void) const;
 	NNetwork *getNetwork(const QString & obj_path) const;
+	void activeNetwork(NNetwork *net);
 
 	void updateDeviceInfo(void);
 	void push(NNetworkTools *ctx);
