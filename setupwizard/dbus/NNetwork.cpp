@@ -2,7 +2,7 @@
 #include "NNetworkDBusInterface.h"
 #include "NDevice.h"
 
-NNetwork::NNetwork (const QString & obj_path, NDevice *dev):/* _encryption (0),*/ _obj_path (obj_path), _essid (""),
+NNetwork::NNetwork (const QString & obj_path, NDevice *dev):QObject(),/* _encryption (0),*/ _obj_path (obj_path), _essid (""),
 	 _hw_address (""),
 		  _strength (0), _frequency (0), _rate (0), _active( false ), _mode (0),
 		  _capabilities( NM_DEVICE_CAP_NONE ),  _dev(dev)
@@ -28,6 +28,7 @@ NDevice *NNetwork::getDevice() const
 
 void NNetwork::setObjectPath (const QString & obj_path)
 {
+	qDebug() << "Network setObjectPath" << obj_path;
 	_obj_path = obj_path;
 }
 
@@ -38,7 +39,8 @@ const QString NNetwork::getObjectPath () const
 
 void NNetwork::setEssid (const QString & essid)
 {
-	_essid = essid;
+	qDebug() << "Network setEssid" << essid;
+    _essid = essid;
 }
 
 const QString NNetwork::getEssid () const
@@ -48,7 +50,8 @@ const QString NNetwork::getEssid () const
 
 void NNetwork::setHardwareAddress(const QString &hw_address)
 {
-	_hw_address = hw_address;
+	qDebug() << "Network setHardwareAddress" << hw_address;
+    _hw_address = hw_address;
 }
 
 const QString NNetwork::getHardwareAddress() const
@@ -58,7 +61,8 @@ const QString NNetwork::getHardwareAddress() const
 
 void NNetwork::setStrength (int strength)
 {
-	_strength = strength;
+	qDebug() << "Network setStrength" << strength;
+    _strength = strength;
 }
 
 int NNetwork::getStrength () const
@@ -68,6 +72,7 @@ int NNetwork::getStrength () const
 
 void NNetwork::setFrequency (double frequency)
 {
+	qDebug() << "Network setFrequency" << frequency;
 	_frequency = frequency;
 }
 
@@ -78,6 +83,7 @@ double NNetwork::getFrequency () const
 
 void NNetwork::setRate (int rate)
 {
+	qDebug() << "Network setRate" << rate;
 	_rate = rate;
 }
 
@@ -88,6 +94,7 @@ int NNetwork::getRate () const
 
 void NNetwork::setMode (int mode)
 {
+	qDebug() << "Network setMode" << mode;
 	_mode = mode;
 }
 
@@ -98,6 +105,7 @@ int NNetwork::getMode () const
 
 void NNetwork::setCapabilities (int capabilties)
 {
+	qDebug() << "Network setCapabilities" << capabilties;
 	_capabilities = capabilties;
 }
 
@@ -108,7 +116,8 @@ int NNetwork::getCapabilities () const
 
 void NNetwork::setActive (bool active)
 {
-	_active = active;
+	qDebug() << "Network setActive" << active;
+    _active = active;
 }
 
 bool NNetwork::isActive () const
@@ -123,6 +132,9 @@ NEncryption* NNetwork::getEncryption (void) const
 
 void NNetwork::setEncryption (NEncryption* encryption)
 {
+	if (_encryption)
+		delete _encryption;
+
 	_encryption = encryption;
 	if ( _encryption )
 		_encryption->setNetwork(this);
@@ -163,12 +175,18 @@ void NNetwork::setHidden (bool hidden)
 
 void NNetwork::updateNetworkInfo()
 {
-	NNetworkDBusInterface::getProperties(_obj_path, this);
+	NNetworkDBusInterface::updateNetwork(this, "");
+}
+
+void NNetwork::emitStrengthChange(NNetwork *net)
+{
+	emit strengthChange(net);
 }
 
 void NNetwork::push(NNetworkTools *ctx)
 {
 	_ctx = ctx;
 	NNetworkDBusInterface::push(ctx);
+	NNetworkDBusInterface::updateNetwork(this, "");
 }
 

@@ -76,8 +76,16 @@ void NDeviceDBusInterface::setHalDeviceInfo (NDevice* dev)
 	return;
 }
 
-void NDeviceDBusInterface::getProperties(const QString &path,
-										 NDevice *dev)
+bool NDeviceDBusInterface::updateActivationStage(NDevice *dev, NMActStage stage)
+{
+	if (!dev)
+		return false;
+	dev->setActivationStage(stage);
+	dev->emitStatusChanged(dev);
+	return true;
+}
+
+bool NDeviceDBusInterface::updateDevice(NDevice *dev, const QString &signal)
 {
 	DBusMessage*     msg   = NULL;
 	DBusConnection*  con   = _ctx->getDBus()->getConnection ();
@@ -106,23 +114,24 @@ void NDeviceDBusInterface::getProperties(const QString &path,
 	int           num_networks      = 0;
 	const char*   active_net_path   = NULL;
 
-	if (!con|| path.isNull() || !dev) {
-		return;
+	if (!con|| !dev || dev->getObjectPath().isNull()) {
+		return false;
 	}
 
-	if (!(msg = dbus_message_new_method_call (NM_DBUS_SERVICE, path.toUtf8().data(), 
+	if (!(msg = dbus_message_new_method_call (NM_DBUS_SERVICE,
+											  dev->getObjectPath().toUtf8().data(), 
 												  NM_DBUS_INTERFACE_DEVICES, "getProperties")))
 	{
 		qDebug() << "getProperties(): couldn't create new dbus message.\n";
-		return;
+		return false;
 	}
 
 	reply = dbus_connection_send_with_reply_and_block (con, msg, -1, NULL);
 	dbus_message_unref (msg);
 	if (!reply)
 	{
-		qDebug() << "getProperties(): didn't get a reply from NetworkManager for device" << path;
-		return;
+		qDebug() << "getProperties(): didn't get a reply from NetworkManager for device" ;
+		return false;
 	}
 
 	if (!dbus_message_get_args (reply, NULL,	DBUS_TYPE_OBJECT_PATH, &obj_path,
@@ -148,9 +157,9 @@ void NDeviceDBusInterface::getProperties(const QString &path,
 									DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &networks, &num_networks,
 									DBUS_TYPE_INVALID))
 	{
- 		qDebug() <<  "getProperties(): unexpected reply from NetworkManager for device." << path;
+ 		qDebug() <<  "getProperties(): unexpected reply from NetworkManager for device." ;
 		dbus_message_unref (reply);
-		return;
+		return false;
  	}
 
 	dev->setInterface (interface);
@@ -181,9 +190,25 @@ void NDeviceDBusInterface::getProperties(const QString &path,
 
 	dbus_free_string_array (networks);
 
+	if (signal == "DeviceStrengthChanged")
+		dev->emitStrengthChange( dev );
+     else if (signal == "DeviceCarrierOn" )
+         dev->emitCarrierOn( dev );
+     else if (signal == "DeviceCarrierOff")
+         dev->emitCarrierOff( dev );
+     else if (signal == "DeviceAdded" )
+         dev->emitAdded( dev );
+	 else if (signal == "DeviceRemoved")
+		 dev->emitRemoved( dev );
+     else if (signal == "DeviceNoLongerActive")
+         dev->emitNoLongerActive( dev );
+     else if (signal == "DeviceNowActive")
+         dev->emitActive( dev );
+     else if (signal == "DeviceActivating" )
+         dev->emitActivating( dev );
 
 	dbus_message_unref (reply);
-	return;
+	return true;
 }
 
 void NDeviceDBusInterface::setActiveNetwork(NNetwork *net, NDevice *dev)
@@ -209,7 +234,7 @@ void NDeviceDBusInterface::setActiveNetwork(NNetwork *net, NDevice *dev)
 			enc->serialize (msg, essid);
 		}
 
-		dbus_connection_send (con, msg, NULL);
+		dbus_connection_send(con, msg, NULL);
 
 		dbus_message_unref (msg);
 	}

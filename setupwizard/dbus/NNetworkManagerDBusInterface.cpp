@@ -14,7 +14,7 @@ void NNetworkManagerDBusInterface::activateDevice (NDevice* dev)
 	DBusMessage*    msg = NULL;
 	DBusConnection* con = _ctx->getDBus ()->getConnection ();
 
-	if (!con) {
+	if (!con || !dev) {
 		return;
 	}
 
@@ -75,6 +75,35 @@ void NNetworkManagerDBusInterface::getDevices()
 	setupDevices(paths, num);
 
 	return;
+}
+
+bool NNetworkManagerDBusInterface::requestName (DBusMessage* /*msg*/)
+{
+	DBusConnection* con = _ctx->getDBus ()->getConnection ();
+	DBusError       error;
+
+	if (!con)
+		return false;
+
+	dbus_error_init (&error);
+	if (dbus_bus_name_has_owner (con, NMI_DBUS_SERVICE, &error)) {
+		printf ("%s already owned.\n", NMI_DBUS_SERVICE);
+		goto out;
+	}
+
+	dbus_error_init (&error);
+	dbus_bus_request_name (con, NMI_DBUS_SERVICE, DBUS_NAME_FLAG_DO_NOT_QUEUE, &error);
+	if (dbus_error_is_set (&error)) {
+		printf ("Error requesting name, %s: %s\n", error.name, error.message);
+		dbus_error_free (&error);
+		goto out;
+	} else {
+		return true;
+	}
+
+out:
+	
+	return false;
 }
 
 void NNetworkManagerDBusInterface::push(NNetworkTools *ctx)

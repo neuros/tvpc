@@ -94,4 +94,42 @@ class NEncryptionWEP : public NEncryption
 	  WEPMethod _method;
 };
 
+
+/* Used by both, Personal and Enterprise */
+
+enum WPAProtocol {
+	 WPA_AUTO     = NM_AUTH_TYPE_WPA_PSK_AUTO, /* WPA Personal */
+	 WPA_TKIP     = NM_AUTH_TYPE_WPA_PSK_TKIP, /* WPA Personal */
+	 WPA_CCMP_AES = NM_AUTH_TYPE_WPA_PSK_CCMP, /* WPA Personal */
+	 WPA_EAP      = NM_AUTH_TYPE_WPA_EAP       /* WPA Enterprise */
+};
+
+enum WPAVersion {
+	WPA1 = IW_AUTH_WPA_VERSION_WPA, /* WPA Personal and Enterprise */
+	WPA2 = IW_AUTH_WPA_VERSION_WPA2 /* WPA Personal and Enterprise */
+};
+
+
+/* EncryptionWPAPersonal */
+/* Have not been tested. */
+class NEncryptionWPAPersonal : public NEncryption
+{
+	public:
+	  NEncryptionWPAPersonal  ();
+	  ~NEncryptionWPAPersonal ();
+
+	  void         setVersion (WPAVersion);
+	  void         setProtocol (WPAProtocol);
+	  WPAProtocol  getProtocol (void);
+	  WPAVersion   getVersion (void);
+
+	  bool serialize   (DBusMessage*, const QString &);
+	  virtual bool deserialize( DBusMessageIter *, int we_cipher );
+	  void setDefaults (void);
+
+	private:
+	  WPAProtocol _protocol;
+	  WPAVersion  _version;
+};
+
 #endif /* _NENCRYPT_H__ */

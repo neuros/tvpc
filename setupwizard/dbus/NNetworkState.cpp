@@ -138,6 +138,8 @@ void NNetworkState::setState (NMState nmstate)
 		default:
 			break;
 	}
+	qDebug() << "set state to " << stateToString();
+
 }
 
 void NNetworkState::updateWirelessState (bool state)

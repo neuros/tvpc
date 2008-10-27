@@ -15,7 +15,7 @@ INCLUDEPATH += . \
                 /usr/include/glib-2.0 \
                 /usr/lib/glib-2.0/include \
                 /usr/local/include/NetworkManager
-LIBS += -ldbus-glib-1 -ldbus-1 -lrt -lhal -lnm-util
+LIBS += -ldbus-glib-1 -ldbus-1 -lrt -lhal -lnm-util -lnl
 
 # Input
 HEADERS += NNetworktools.h \

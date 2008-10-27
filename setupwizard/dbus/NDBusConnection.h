@@ -16,6 +16,7 @@ public:
 
 	bool registerObjectPath(void) const;
 	bool addMatch(void);
+	bool addFilter(void);
     bool open(void);
 	void close(void);
 
@@ -25,10 +26,15 @@ public:
 		return _initialized;
 	}
 
+	static DBusHandlerResult nmd_dbus_filter (DBusConnection *connection, DBusMessage *message, void *user_data);
 	DBusConnection *getConnection(void){
 		return _dbus_connection;
 	}
+	static gboolean triggerReconnect(gpointer user_data);
+	static bool handleUpdateDeviceSignal( DBusMessage * msg );
+
 private:
+	bool dbusInit(void);
 	static NNetworkTools *_ctx;
 	static DBusConnection *_dbus_connection;
 	bool _initialized;

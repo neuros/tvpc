@@ -3,12 +3,14 @@
 #include "NDBusConnection.h"
 #include "NEncryption.h"
 #include <QStringList>
+#include <QObject>
 
 class NNetworkTools;
 class NDevice;
 
-class NNetwork
+class NNetwork : public QObject
 {
+	Q_OBJECT
 
 public:
 	  NNetwork (const QString&, NDevice *);
@@ -45,8 +47,13 @@ public:
 
 	  NDevice *getDevice(void) const;
 
+	  void emitStrengthChange(NNetwork *net);
 	  void updateNetworkInfo(void);
       void push(NNetworkTools *ctx);
+public slots:
+
+signals:
+	void strengthChange(NNetwork *net);
 private:
 	  NEncryption*  _encryption;
 	  QString      _obj_path;

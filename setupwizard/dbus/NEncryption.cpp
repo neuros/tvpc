@@ -240,6 +240,122 @@ bool NEncryptionWEP::deserialize( DBusMessageIter * iter, int we_cipher )
 	return true;
 }
 
+/* EncryptionWPAPersonal */
+NEncryptionWPAPersonal::NEncryptionWPAPersonal ()
+{
+	_cipherList = new CipherList (); 
+        _cipherList->append (cipher_wpa_psk_hex_new ());
+        _cipherList->append (cipher_wpa_psk_passphrase_new ());
+	setDefaults ();
+}
+
+NEncryptionWPAPersonal::~NEncryptionWPAPersonal ()
+{
+
+}
+
+bool NEncryptionWPAPersonal::serialize (DBusMessage* msg, const QString & essid)
+{
+	//kdDebug() << k_funcinfo << essid << endl;
+	bool status = false;
+
+	/*
+	 * There are two possibilities: we can serialize Encryption with or without a key.
+	 * In the latter case, if we have a key in the secure storage, we can send the rest
+	 * of the data to NM and supply a key on demand. This will show NM that we know
+	 * the network we are connecting to and there is no need to ask user for a new key.
+	 */
+	if (_secret.isEmpty() ) {
+		if ( !msg || essid.isEmpty() )
+			return false;
+		/*
+		 * We only need to pass we_cipher remembered since the last connection.
+		 * Unfortunately, libnm-util functions accept only IEEE_802_11_Cipher object
+		 * so we need to construct one with required we_cipher value.
+		 */
+		IEEE_802_11_Cipher *fake_cipher = 0;
+		const char *fake_key = "";
+
+		/* 
+		 * In case of WPA Personal, we can create any cipher_wpa_psk object we like
+		 * and set the required we_cipher via set_we_cipher method.
+		 */
+		if ( _we_cipher != -1 ) {
+			fake_cipher = cipher_wpa_psk_hex_new();
+			cipher_wpa_psk_hex_set_we_cipher(fake_cipher, _we_cipher);
+			status = nmu_security_serialize_wpa_psk_with_cipher (msg, fake_cipher, essid.toUtf8().data(), fake_key,
+									     _version, IW_AUTH_KEY_MGMT_PSK);
+			ieee_802_11_cipher_unref(fake_cipher);
+		}
+	} else {
+		if ( !msg || !essid.isNull() || !isValid( essid ) )
+			return false;
+
+		status = nmu_security_serialize_wpa_psk_with_cipher (msg, _currentCipher, essid.toUtf8().data(),
+								     _secret.toUtf8().data(), _version, IW_AUTH_KEY_MGMT_PSK);
+	}
+
+	return status;
+}
+
+bool NEncryptionWPAPersonal::deserialize( DBusMessageIter * iter, int we_cipher )
+{
+	char* key = 0;
+	int   keyLen, wpaVersion, keyManagement;
+
+	if ( !iter )
+		return false;
+	if ( !(we_cipher == NM_AUTH_TYPE_WPA_PSK_TKIP || we_cipher == NM_AUTH_TYPE_WPA_PSK_CCMP ||
+	       we_cipher == NM_AUTH_TYPE_WPA_PSK_AUTO) )
+		return false;
+
+	if (!nmu_security_deserialize_wpa_psk (iter, &key, &keyLen, &wpaVersion, &keyManagement) )
+		return false;
+
+	if ( !(wpaVersion == IW_AUTH_WPA_VERSION_WPA || wpaVersion == IW_AUTH_WPA_VERSION_WPA2 ) )
+		return false;
+
+	if ( keyManagement != IW_AUTH_KEY_MGMT_PSK )
+		return false;
+
+	setVersion( (WPAVersion)wpaVersion );
+	setWeCipher( we_cipher );
+
+	// we don't store this key, as it is the hashed version
+	return true;
+}
+
+void NEncryptionWPAPersonal::setDefaults (void)
+{
+	/* Once NM can default to "no default protocol" change this */
+	setProtocol (WPA_AUTO);
+	setVersion  (WPA1);
+}
+
+void NEncryptionWPAPersonal::setProtocol (WPAProtocol protocol)
+{
+	_protocol = protocol;
+
+	/* switch ciphers to match with protocol */
+	cipher_wpa_psk_hex_set_we_cipher        (_cipherList->at(0), _protocol);
+	cipher_wpa_psk_passphrase_set_we_cipher (_cipherList->at(1), _protocol);
+}
+
+WPAProtocol NEncryptionWPAPersonal::getProtocol (void)
+{
+	return _protocol;
+}
+
+void NEncryptionWPAPersonal::setVersion (WPAVersion version)
+{
+	_version = version;
+}
+
+WPAVersion NEncryptionWPAPersonal::getVersion (void)
+{
+	return _version;
+}
+
 
 
 

@@ -3,7 +3,7 @@
 
 NNetworkTools *NNetworkDBusInterface::_ctx = NULL;
 
-void NNetworkDBusInterface::getProperties(const QString &path, NNetwork *net)
+void NNetworkDBusInterface::updateNetwork(NNetwork *net, const QString &signal)
 {
 	DBusMessage*        msg    = NULL;
 	DBusMessage*		reply = NULL;
@@ -19,7 +19,7 @@ void NNetworkDBusInterface::getProperties(const QString &path, NNetwork *net)
 	dbus_int32_t capabilities = NM_802_11_CAP_NONE;
 	dbus_bool_t  broadcast    = true;
 
-	if (path.isNull() || !net || !con)
+	if ( !net || !con || !net->getDevice())
 		return;
 
 	if (!(msg = dbus_message_new_method_call (NM_DBUS_SERVICE, net->getObjectPath().toUtf8().data(),
@@ -32,7 +32,7 @@ void NNetworkDBusInterface::getProperties(const QString &path, NNetwork *net)
 	dbus_message_unref (msg);
 	if (!reply)
 	{
-		qDebug() << "getProperties(): didn't get a reply from NetworkManager for device" << path;
+		qDebug() << "getProperties(): didn't get a reply from NetworkManager for device" ;
 		return;
 	}
 
@@ -65,6 +65,11 @@ void NNetworkDBusInterface::getProperties(const QString &path, NNetwork *net)
 		net->setMode (mode);
 		net->setCapabilities (capabilities);
 		net->setHidden (!broadcast);
+		qDebug() << "ip = " << net->getDevice()->getIPv4Address();
+		if (signal == "WirelessNetworkAppeared")
+			net->getDevice()->emitNetworkFound(net);
+		else if (signal == "WirelessNetworkDisappeared")
+			net->getDevice()->emitNetworkDisappeared(net);
 	}
 
 	dbus_message_unref (reply);
@@ -72,6 +77,18 @@ void NNetworkDBusInterface::getProperties(const QString &path, NNetwork *net)
 	return;
 
 }
+
+bool NNetworkDBusInterface::updateNetworkStrength(NNetwork *net, int strength)
+{
+	if (net == NULL)
+		updateNetwork(net, "");
+	else {
+		net->setStrength(strength);
+		net->emitStrengthChange(net);
+	}
+	return true;
+}
+
 void NNetworkDBusInterface::push(NNetworkTools *ctx)
 {
 	_ctx = ctx;

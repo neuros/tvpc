@@ -2,6 +2,8 @@
 #define _NDEVICE_H__
 #include "NDBusConnection.h"
 #include "NNetwork.h"
+#include <QObject>
+
 class DevicePrivate;
 class NNetworkTools;
 
@@ -12,11 +14,12 @@ enum bustype {
 	BUS_UNKNOWN	= 15 
 };
 
-class NDevice
+class NDevice : public QObject
 {
-	friend class NDeviceDBusInterface;
-
+	Q_OBJECT
 public:
+		friend class NDeviceDBusInterface;
+
 	  NDevice (const QString & );
 	  NDevice ();
 	  ~NDevice ();
@@ -46,16 +49,13 @@ public:
 	bool         hasCarrierDetect    (void) const;
 	bool        isWired        (void) const;
 	bool        isWireless     (void) const;
+	int            getStrength         (void) const;
 
 	NNetworkList getNetworks(void) const;
 	NNetwork *getActiveNetwork(void) const;
 	NNetwork *getNetwork(const QString & obj_path) const;
 	void activeNetwork(NNetwork *net);
 
-	void updateDeviceInfo(void);
-	void push(NNetworkTools *ctx);
-
-private:
 	void 		 setInterface        (const QString&);
 	void         setBustype          (const QString&);
 	void         setProduct          (const QString&);
@@ -74,13 +74,43 @@ private:
 	void         setSecondaryDNS     (const QString&);
 	void         setMode             (unsigned int);
 	void         setStrength         (int);
-	int            getStrength         (void) const;
 	void         setLinkActive       (bool);
 	void         setSpeed            (int);
 	void         setCapabilities     (unsigned int);
 	void         setCapabilitiesType (unsigned int);
 	void 		 setActiveNetworkPath(const QString &);
 
+	void updateDeviceInfo(void);
+	void push(NNetworkTools *ctx);
+
+	void emitStrengthChange (NDevice*);
+     void emitCarrierOn      (NDevice*);
+     void emitCarrierOff     (NDevice*);
+     void emitAdded          (NDevice*);
+     void emitRemoved        (NDevice*);
+     void emitNoLongerActive (NDevice*);
+     void emitActive         (NDevice*);
+     void emitActivating     (NDevice*);
+     void emitNetworkFound   (NNetwork*);
+	 void emitNetworkDisappeared(NNetwork*);
+	 void emitStatusChanged(NDevice *);
+public:
+	signals:
+	void strengthChange     (NDevice *);
+	void carrierOn          (NDevice*);
+	void carrierOff         (NDevice*);
+	void added              (NDevice*);
+	void removed            (NDevice*);
+	void noLongerActive     (NDevice*);
+	void active             (NDevice*);
+	void activating         (NDevice*);
+	void networkFound       (NNetwork*);
+	void networkDisappeared (NNetwork*);
+	void statusChanged(NDevice *);
+
+public slots:
+
+private:
 	void setupNetworks(char **networks, int num_networks);
 private:
 	DevicePrivate * d;

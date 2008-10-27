@@ -12,8 +12,9 @@ class NDeviceDBusInterface
 public:
 	static void setHalDeviceInfo (NDevice *dev);
 
-	static void getProperties(const QString &path, NDevice *device);
+	static bool updateDevice(NDevice *device, const QString &signal);
 
+	static bool updateActivationStage(NDevice *dev, NMActStage stage);
 	static void setActiveNetwork(NNetwork *net, NDevice  *dev);
 
 	static void push(NNetworkTools *ctx);

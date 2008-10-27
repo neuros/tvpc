@@ -15,6 +15,7 @@ public:
 
 	NDeviceList getDevices(void);
 	NDevice *getActiveDevice(void);
+	NDevice *getDevice(const QString &obj_path);
 	void setActiveDevice(NDevice *dev);
 
 	void setupDevices(char **path, int num);

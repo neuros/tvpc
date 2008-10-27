@@ -11,7 +11,8 @@ public:
 	static void push(NNetworkTools *);
 	static void getDevices();
 	static void activateDevice (NDevice* dev);
-
+	static bool requestName (DBusMessage *msg);
+	
 private:
 	static void setupDevices(char **path, int num);
 

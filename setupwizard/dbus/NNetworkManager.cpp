@@ -16,7 +16,7 @@ NNetworkManager::~NNetworkManager()
 
 NDeviceList NNetworkManager::getDevices()
 {
-	NNetworkManagerDBusInterface::getDevices();
+	//NNetworkManagerDBusInterface::getDevices();
 	return _device_list;
 }
 
@@ -33,6 +33,7 @@ NDevice *NNetworkManager::getActiveDevice()
 void NNetworkManager::setActiveDevice(NDevice *dev)
 {
 	NNetworkManagerDBusInterface::activateDevice(dev);
+//	dev->setActive(true);
 }
 
 NNetworkManager *NNetworkManager::getInstance()
@@ -45,6 +46,17 @@ NNetworkManager *NNetworkManager::getInstance()
 void NNetworkManager::networkRefresh()
 {
 	NNetworkManagerDBusInterface::getDevices();
+}
+
+NDevice *NNetworkManager::getDevice(const QString &obj_path)
+{
+	for (int i=0; i< _device_list.count(); i++) {
+		if (_device_list.at(i)->getObjectPath() == obj_path) {
+			return _device_list.at(i);
+		}
+	}
+
+	return NULL;
 }
 
 void NNetworkManager::setupDevices(char **path, int num)
@@ -60,7 +72,6 @@ void NNetworkManager::setupDevices(char **path, int num)
 	for (int i=0; i<num; i++) {
 			dev = new NDevice(path[i]);
 			dev->push(_ctx);
-			dev->updateDeviceInfo();
 			_device_list << dev;
 	}
 }

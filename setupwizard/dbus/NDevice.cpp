@@ -38,13 +38,13 @@ public:
 	NNetworkList  networkList;
 };
 
-NDevice::NDevice (const QString & obj_path)
+NDevice::NDevice (const QString & obj_path) : QObject()
 {
 	d = new DevicePrivate;
 	d->obj_path = obj_path;
 }
 
-NDevice::NDevice ()
+NDevice::NDevice () : QObject()
 {
 	d = new DevicePrivate;
 }
@@ -312,7 +312,7 @@ bool NDevice::isWired () const
 
 void NDevice::updateDeviceInfo()
 {
-	NDeviceDBusInterface::getProperties(d->obj_path, this);
+	NDeviceDBusInterface::updateDevice(this, "");
 }
 
 NNetworkList NDevice::getNetworks() const
@@ -363,14 +363,63 @@ void NDevice::setupNetworks(char **networks, int num_networks)
 	for (int i=0; i<num_networks; i++) {
 		net = new NNetwork(networks[i], this);
 		net->push(_ctx);
-		net->updateNetworkInfo();
 		d->networkList << net;
 	}
+}
+
+void NDevice::emitStrengthChange( NDevice * dev )
+{
+	emit strengthChange(dev);
+}
+
+void NDevice:: emitCarrierOn( NDevice * dev )
+{
+	emit carrierOn( dev );
+}
+void NDevice:: emitCarrierOff( NDevice * dev )
+{
+	emit carrierOff( dev );
+}
+void NDevice:: emitAdded( NDevice * dev )
+{
+	emit added( dev );
+}
+void NDevice:: emitRemoved( NDevice * dev )
+{
+	emit removed( dev );
+}
+void NDevice:: emitNoLongerActive( NDevice * dev )
+{
+	emit noLongerActive( dev );
+}
+void NDevice:: emitActive( NDevice * dev )
+{
+	emit active( dev );
+}
+void NDevice:: emitActivating( NDevice * dev )
+{
+	emit activating( dev );
+}
+void NDevice::emitNetworkFound( NNetwork * net )
+{
+	emit networkFound( net );
+}
+
+void NDevice::emitNetworkDisappeared( NNetwork * net )
+{
+	emit networkDisappeared( net );
+}
+
+
+void NDevice::emitStatusChanged(NDevice *dev)
+{
+	emit statusChanged(dev);
 }
 
 void NDevice::push(NNetworkTools *ctx)
 {
 	_ctx = ctx;
 	NDeviceDBusInterface::push(ctx);
+	NDeviceDBusInterface::updateDevice(this,  "");
 }
 
