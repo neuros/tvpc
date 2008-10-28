@@ -28,7 +28,6 @@ NDevice *NNetwork::getDevice() const
 
 void NNetwork::setObjectPath (const QString & obj_path)
 {
-	qDebug() << "Network setObjectPath" << obj_path;
 	_obj_path = obj_path;
 }
 
@@ -39,7 +38,6 @@ const QString NNetwork::getObjectPath () const
 
 void NNetwork::setEssid (const QString & essid)
 {
-	qDebug() << "Network setEssid" << essid;
     _essid = essid;
 }
 
@@ -50,7 +48,6 @@ const QString NNetwork::getEssid () const
 
 void NNetwork::setHardwareAddress(const QString &hw_address)
 {
-	qDebug() << "Network setHardwareAddress" << hw_address;
     _hw_address = hw_address;
 }
 
@@ -61,7 +58,6 @@ const QString NNetwork::getHardwareAddress() const
 
 void NNetwork::setStrength (int strength)
 {
-	qDebug() << "Network setStrength" << strength;
     _strength = strength;
 }
 
@@ -72,7 +68,6 @@ int NNetwork::getStrength () const
 
 void NNetwork::setFrequency (double frequency)
 {
-	qDebug() << "Network setFrequency" << frequency;
 	_frequency = frequency;
 }
 
@@ -83,7 +78,6 @@ double NNetwork::getFrequency () const
 
 void NNetwork::setRate (int rate)
 {
-	qDebug() << "Network setRate" << rate;
 	_rate = rate;
 }
 
@@ -94,7 +88,6 @@ int NNetwork::getRate () const
 
 void NNetwork::setMode (int mode)
 {
-	qDebug() << "Network setMode" << mode;
 	_mode = mode;
 }
 
@@ -105,7 +98,6 @@ int NNetwork::getMode () const
 
 void NNetwork::setCapabilities (int capabilties)
 {
-	qDebug() << "Network setCapabilities" << capabilties;
 	_capabilities = capabilties;
 }
 
@@ -116,7 +108,6 @@ int NNetwork::getCapabilities () const
 
 void NNetwork::setActive (bool active)
 {
-	qDebug() << "Network setActive" << active;
     _active = active;
 }
 

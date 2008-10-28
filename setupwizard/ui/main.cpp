@@ -1,10 +1,13 @@
 #include <QApplication>
 #include <QtGui>
 #include "nsplashform.h"
+#include "dbus/NNetworkTools.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
+
+	NNetworkTools tools;
 
 	NSplashForm form;
 

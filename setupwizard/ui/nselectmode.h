@@ -5,12 +5,16 @@
 
 class NSelectMode : public QDialog, private Ui::NSelectModeDlg
 {
+	Q_OBJECT
+
 public:
 	NSelectMode(QDialog *parent = 0);
 	~NSelectMode();
+public slots:
+signals:
+	void createOverViewDlg(QDialog *);
+
 protected:
 	void keyPressEvent(QKeyEvent *);
-private:
-	QDialog *overViewDlg;
 };
 #endif /* _NSELECT_MODE_H__ */

@@ -1,0 +1,232 @@
+<ui version="4.0" >
+ <class>NWireConfigQueryDlg</class>
+ <widget class="QDialog" name="NWireConfigQueryDlg" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>990</width>
+    <height>650</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>network cable connected</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="1" >
+    <spacer name="verticalSpacer_3" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>957</width>
+       <height>38</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" >
+    <spacer name="horizontalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>37</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QLabel" name="label" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="font" >
+      <font>
+       <pointsize>30</pointsize>
+      </font>
+     </property>
+     <property name="text" >
+      <string>A network cable is connected.</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" >
+    <spacer name="horizontalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>31</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0" >
+    <spacer name="horizontalSpacer_3" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>75</width>
+       <height>57</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QLabel" name="label_2" >
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="font" >
+      <font>
+       <pointsize>30</pointsize>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Configure it now?</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" >
+    <spacer name="horizontalSpacer_4" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>75</width>
+       <height>57</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="1" >
+    <spacer name="verticalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>957</width>
+       <height>37</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="0" >
+    <spacer name="horizontalSpacer_5" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>75</width>
+       <height>297</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QListWidget" name="configqurylist" >
+     <property name="minimumSize" >
+      <size>
+       <width>960</width>
+       <height>203</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>16777215</width>
+       <height>250</height>
+      </size>
+     </property>
+     <property name="font" >
+      <font>
+       <pointsize>32</pointsize>
+      </font>
+     </property>
+     <property name="spacing" >
+      <number>0</number>
+     </property>
+     <property name="currentRow" >
+      <number>0</number>
+     </property>
+     <item>
+      <property name="text" >
+       <string>           Yes, lets configure Wired (tcp/ip) now</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>           No, lets configure Wireless instead</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>           No, do not configure network at this time</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>           Tell me more...(initiates help)</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="4" column="2" >
+    <spacer name="horizontalSpacer_6" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>75</width>
+       <height>297</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="1" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>957</width>
+       <height>58</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

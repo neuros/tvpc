@@ -9,10 +9,19 @@ class NSplashForm : public QWidget, private Ui::nsplashForm
 public:
 	NSplashForm(QWidget *parent = 0);
 	~NSplashForm();
+public slots:
+	void onCreateOverViewDlg(QDialog *);
+	void onCreateWireConfigQueryDlg(QDialog *);
+	void onCreateWirelessConfigQueryDlg(QDialog *);
+	void onCreateInsertLanDlg(QDialog *);
 protected:
 	void keyPressEvent(QKeyEvent *);
 
 private:
 	QDialog *selectMode;
+	QDialog *overView;
+	QDialog *wireQuery;
+	QDialog *wirelessQuery;
+	QDialog *insertLan;
 };
 #endif /* _NSPlASHFORM_H__ */
