@@ -10,12 +10,25 @@ public:
 	NSplashForm(QWidget *parent = 0);
 	~NSplashForm();
 public slots:
-	void onCreateOverViewDlg(QDialog *);
-	void onCreateWireConfigQueryDlg(QDialog *);
-	void onCreateWirelessConfigQueryDlg(QDialog *);
-	void onCreateInsertLanDlg(QDialog *);
+	void createOverViewDlg(QDialog *);
+	void createWireConfigQueryDlg(QDialog *);
+	void createWirelessConfigQueryDlg(QDialog *);
+	void createInsertLanDlg(QDialog *);
+	void createNetworkListForm(QWidget *);
+
+	void onNetworkConfigQuery(QDialog *);
+	void onInsertLan(QDialog *);
+
+	void onSelectModeQuit();
+	void onOverViewQuit();
+	void onWirelessQueryQuit();
+	void onInsertLanQuit();
+	void onNetworkListQuit();
 protected:
 	void keyPressEvent(QKeyEvent *);
+
+private:
+	bool isLanDetected(void) const;
 
 private:
 	QDialog *selectMode;
@@ -23,5 +36,7 @@ private:
 	QDialog *wireQuery;
 	QDialog *wirelessQuery;
 	QDialog *insertLan;
+
+	QWidget *networkList;
 };
 #endif /* _NSPlASHFORM_H__ */

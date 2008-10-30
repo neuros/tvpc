@@ -47,11 +47,9 @@ public:
 
 	  NDevice *getDevice(void) const;
 
-	  void emitStrengthChange(NNetwork *net);
-	  void updateNetworkInfo(void);
       void push(NNetworkTools *ctx);
 public slots:
-
+	void emitStrengthChange(NNetwork *net);
 signals:
 	void strengthChange(NNetwork *net);
 private:

@@ -41,6 +41,7 @@ public:
 	const QString      getPrimaryDNS       (void) const;
 	const QString      getSecondaryDNS     (void) const;
 	const QString	   getActiveNetworkPath(void) const;
+	const QString	   getDriver			(void) const;
 	unsigned int       getMode             (void) const;
 	bool                       getLinkActive       (void) const;
 	int           				 getSpeed            (void) const;
@@ -72,6 +73,7 @@ public:
 	void         setRoute            (const QString&);
 	void         setPrimaryDNS       (const QString&);
 	void         setSecondaryDNS     (const QString&);
+	void		 setDriver					(const QString &);
 	void         setMode             (unsigned int);
 	void         setStrength         (int);
 	void         setLinkActive       (bool);
@@ -83,17 +85,6 @@ public:
 	void updateDeviceInfo(void);
 	void push(NNetworkTools *ctx);
 
-	void emitStrengthChange (NDevice*);
-     void emitCarrierOn      (NDevice*);
-     void emitCarrierOff     (NDevice*);
-     void emitAdded          (NDevice*);
-     void emitRemoved        (NDevice*);
-     void emitNoLongerActive (NDevice*);
-     void emitActive         (NDevice*);
-     void emitActivating     (NDevice*);
-     void emitNetworkFound   (NNetwork*);
-	 void emitNetworkDisappeared(NNetwork*);
-	 void emitStatusChanged(NDevice *);
 public:
 	signals:
 	void strengthChange     (NDevice *);
@@ -104,12 +95,24 @@ public:
 	void noLongerActive     (NDevice*);
 	void active             (NDevice*);
 	void activating         (NDevice*);
-	void networkFound       (NNetwork*);
-	void networkDisappeared (NNetwork*);
+	void networkFound       (NDevice*);
+	void networkDisappeared (NDevice*);
 	void statusChanged(NDevice *);
 
+	void networkStrengthChange(NNetwork *);
 public slots:
-
+	void emitStrengthChange (NDevice*);
+	void emitCarrierOn      (NDevice*);
+	void emitCarrierOff     (NDevice*);
+	void emitAdded          (NDevice*);
+	void emitRemoved        (NDevice*);
+	void emitNoLongerActive (NDevice*);
+	void emitActive         (NDevice*);
+	void emitActivating     (NDevice*);
+	void emitNetworkFound   (NDevice*);
+	void emitNetworkDisappeared(NDevice*);
+	void emitStatusChanged(NDevice *);
+	void emitNetworkStrengthChange(NNetwork *);
 private:
 	void setupNetworks(char **networks, int num_networks);
 private:

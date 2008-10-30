@@ -3,7 +3,7 @@
 
 NNetworkTools *NNetworkDBusInterface::_ctx = NULL;
 
-void NNetworkDBusInterface::updateNetwork(NNetwork *net, const QString &signal)
+void NNetworkDBusInterface::updateNetwork(NNetwork *net)
 {
 	DBusMessage*        msg    = NULL;
 	DBusMessage*		reply = NULL;
@@ -65,11 +65,7 @@ void NNetworkDBusInterface::updateNetwork(NNetwork *net, const QString &signal)
 		net->setMode (mode);
 		net->setCapabilities (capabilities);
 		net->setHidden (!broadcast);
-		qDebug() << "ip = " << net->getDevice()->getIPv4Address();
-		if (signal == "WirelessNetworkAppeared")
-			net->getDevice()->emitNetworkFound(net);
-		else if (signal == "WirelessNetworkDisappeared")
-			net->getDevice()->emitNetworkDisappeared(net);
+
 	}
 
 	dbus_message_unref (reply);
@@ -81,7 +77,7 @@ void NNetworkDBusInterface::updateNetwork(NNetwork *net, const QString &signal)
 bool NNetworkDBusInterface::updateNetworkStrength(NNetwork *net, int strength)
 {
 	if (net == NULL)
-		updateNetwork(net, "");
+		updateNetwork(net);
 	else {
 		net->setStrength(strength);
 		net->emitStrengthChange(net);

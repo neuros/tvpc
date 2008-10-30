@@ -8,7 +8,7 @@ class NNetworkTools;
 class NNetworkDBusInterface
 {
 public:
-	static void updateNetwork(NNetwork *network, const QString &signal);
+	static void updateNetwork(NNetwork *network);
 
 	static bool updateNetworkStrength(NNetwork *net, int strength);
 	static void push(NNetworkTools *ctx);

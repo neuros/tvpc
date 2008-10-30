@@ -9,6 +9,9 @@ NNetwork::NNetwork (const QString & obj_path, NDevice *dev):QObject(),/* _encryp
 {
 	_encryption = new NEncryptionNone ();
 	_encryption->setNetwork(this);
+
+	connect(this, SIGNAL(strengthChange(NNetwork *)),
+			dev, SLOT(emitNetworkStrengthChange(NNetwork *)));
 }
 
 NNetwork::~NNetwork ()
@@ -164,13 +167,9 @@ void NNetwork::setHidden (bool hidden)
 	_hidden = hidden;
 }
 
-void NNetwork::updateNetworkInfo()
-{
-	NNetworkDBusInterface::updateNetwork(this, "");
-}
-
 void NNetwork::emitStrengthChange(NNetwork *net)
 {
+	qDebug() << "strength changed" << net->getStrength();
 	emit strengthChange(net);
 }
 
@@ -178,6 +177,6 @@ void NNetwork::push(NNetworkTools *ctx)
 {
 	_ctx = ctx;
 	NNetworkDBusInterface::push(ctx);
-	NNetworkDBusInterface::updateNetwork(this, "");
+	NNetworkDBusInterface::updateNetwork(this);
 }
 

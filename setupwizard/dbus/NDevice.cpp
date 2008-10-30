@@ -27,6 +27,7 @@ public:
 	QString      route;
 	QString      pri_dns;
 	QString      sec_dns;
+	QString		 driver;
 	unsigned int mode;
 	int          strength;
 	bool         link_active;
@@ -111,6 +112,16 @@ void NDevice::setObjectPath (const QString & obj_path)
 const QString NDevice::getObjectPath () const
 {
 	return d->obj_path;
+}
+
+void NDevice::setDriver(const QString &driver)
+{
+	d->driver = driver;
+}
+
+const QString NDevice::getDriver() const
+{
+	return d->driver;
 }
 
 const QString NDevice::getActiveNetworkPath() const
@@ -400,20 +411,27 @@ void NDevice:: emitActivating( NDevice * dev )
 {
 	emit activating( dev );
 }
-void NDevice::emitNetworkFound( NNetwork * net )
+void NDevice::emitNetworkFound( NDevice * dev )
 {
-	emit networkFound( net );
+	qDebug() << "network found";
+	emit networkFound( dev );
 }
 
-void NDevice::emitNetworkDisappeared( NNetwork * net )
+void NDevice::emitNetworkDisappeared( NDevice * dev )
 {
-	emit networkDisappeared( net );
+	emit networkDisappeared( dev );
 }
 
 
 void NDevice::emitStatusChanged(NDevice *dev)
 {
 	emit statusChanged(dev);
+}
+
+void NDevice::emitNetworkStrengthChange(NNetwork *net)
+{
+	qDebug() << "NNetwork changed";
+	emit networkStrengthChange(net);
 }
 
 void NDevice::push(NNetworkTools *ctx)

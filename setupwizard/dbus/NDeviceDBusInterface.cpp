@@ -76,6 +76,38 @@ void NDeviceDBusInterface::setHalDeviceInfo (NDevice* dev)
 	return;
 }
 
+bool NDeviceDBusInterface::getDeviceDriver(NDevice *dev)
+{
+	DBusMessage *	msg;
+	DBusMessage *	reply;
+	char *		driver = NULL;
+	DBusError		error;
+	DBusConnection*  con   = _ctx->getDBus()->getConnection ();
+
+	if (!dev || dev->getObjectPath().isNull())
+		return false;
+
+	if (!(msg = dbus_message_new_method_call (NM_DBUS_SERVICE,
+											  dev->getObjectPath().toUtf8().data(),
+											  NM_DBUS_INTERFACE_DEVICES, "getDriver"))) {
+		return false;
+	}
+
+	dbus_error_init (&error);
+	reply = dbus_connection_send_with_reply_and_block (con, msg, -1, &error);
+	dbus_message_unref (msg);
+	if (dbus_error_is_set (&error))
+		dbus_error_free (&error);
+	else if (reply)
+	{
+		if (dbus_message_get_args (reply, NULL, DBUS_TYPE_STRING, &driver, DBUS_TYPE_INVALID))
+		dbus_message_unref (reply);
+	}
+
+	dev->setDriver(driver);
+	return true;
+
+}
 bool NDeviceDBusInterface::updateActivationStage(NDevice *dev, NMActStage stage)
 {
 	if (!dev)
@@ -190,6 +222,8 @@ bool NDeviceDBusInterface::updateDevice(NDevice *dev, const QString &signal)
 
 	dbus_free_string_array (networks);
 
+	getDeviceDriver(dev);
+
 	if (signal == "DeviceStrengthChanged")
 		dev->emitStrengthChange( dev );
      else if (signal == "DeviceCarrierOn" )
@@ -206,6 +240,10 @@ bool NDeviceDBusInterface::updateDevice(NDevice *dev, const QString &signal)
          dev->emitActive( dev );
      else if (signal == "DeviceActivating" )
          dev->emitActivating( dev );
+	 else if (signal == "WirelessNetworkAppeared")
+		 dev->emitNetworkFound(dev);
+	 else if (signal == "WirelessNetworkDisappeared")
+		 dev->emitNetworkDisappeared(dev);
 
 	dbus_message_unref (reply);
 	return true;

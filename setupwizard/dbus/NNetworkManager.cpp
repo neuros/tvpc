@@ -3,7 +3,8 @@
 
 NNetworkManager *NNetworkManager::_device_instance = NULL;
 
-NNetworkManager::NNetworkManager()
+NNetworkManager::NNetworkManager() :
+	QObject()
 {
 
 }
@@ -16,8 +17,16 @@ NNetworkManager::~NNetworkManager()
 
 NDeviceList NNetworkManager::getDevices()
 {
-	//NNetworkManagerDBusInterface::getDevices();
 	return _device_list;
+}
+
+NDevice *NNetworkManager::getWirelessDevice()
+{
+	for (int i=0; i<_device_list.count(); i++) {
+		if (_device_list.at(i)->isWireless())
+			return _device_list.at(i);
+	}
+	return NULL;
 }
 
 NDevice *NNetworkManager::getActiveDevice()
@@ -33,7 +42,6 @@ NDevice *NNetworkManager::getActiveDevice()
 void NNetworkManager::setActiveDevice(NDevice *dev)
 {
 	NNetworkManagerDBusInterface::activateDevice(dev);
-//	dev->setActive(true);
 }
 
 NNetworkManager *NNetworkManager::getInstance()
@@ -59,6 +67,17 @@ NDevice *NNetworkManager::getDevice(const QString &obj_path)
 	return NULL;
 }
 
+void NNetworkManager::emitNetworkStrengthChange(NNetwork *net)
+{
+	emit networkStrengthChange(net);
+}
+
+void NNetworkManager::emitNetworkInfoRefresh(NDevice *dev)
+{
+	qDebug() << "emitNetworkInfoRefresh";
+	emit networkInfoRefresh(dev);
+}
+
 void NNetworkManager::setupDevices(char **path, int num)
 {
 	NDevice *dev;
@@ -71,6 +90,13 @@ void NNetworkManager::setupDevices(char **path, int num)
 
 	for (int i=0; i<num; i++) {
 			dev = new NDevice(path[i]);
+			connect(dev, SIGNAL(networkStrengthChange(NNetwork *)),
+					this, SLOT(emitNetworkStrengthChange(NNetwork *)));
+			connect(dev, SIGNAL(networkDisappeared(NDevice *)),
+					this, SLOT(emitNetworkInfoRefresh(NDevice *)));
+			connect(dev, SIGNAL(networkFound(NDevice *)),
+					this, SLOT(emitNetworkInfoRefresh(NDevice *)));
+
 			dev->push(_ctx);
 			_device_list << dev;
 	}

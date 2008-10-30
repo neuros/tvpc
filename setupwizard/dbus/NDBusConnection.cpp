@@ -60,7 +60,7 @@ DBusHandlerResult NDBusConnection::nmd_dbus_filter (
 	const char* member      = dbus_message_get_member    (msg);
 	bool        handled     = true;
 	NDevice *dev = NULL;
-	fprintf(stderr, "filter\n");
+
 	if (dbus_message_is_signal (msg, DBUS_INTERFACE_LOCAL, "Disconnected")) {
 		fprintf(stderr, "Disconnected\n");
 		g_timeout_add (3000, triggerReconnect, NULL);
@@ -118,13 +118,12 @@ DBusHandlerResult NDBusConnection::nmd_dbus_filter (
  	else if (dbus_message_is_signal (msg, NM_DBUS_INTERFACE, "WirelessNetworkAppeared")) {
  		char* obj_path = NULL;
  		char* net_path = NULL;
-//
+		qDebug() << "WirelessNetworkAppeared";
  		if (dbus_message_get_args (msg, NULL, DBUS_TYPE_OBJECT_PATH, &obj_path,
  						      DBUS_TYPE_OBJECT_PATH, &net_path, DBUS_TYPE_INVALID)) {
-			dev = _ctx->getManager()->getDevice(obj_path);
+			dev = _ctx->getManager()->getWirelessDevice();
 			if (dev)
-					NNetworkDBusInterface::updateNetwork (
-						dev->getNetwork(net_path), "WirelessNetworkAppeared");
+					NDeviceDBusInterface::updateDevice(dev, "WirelessNetworkAppeared");
 			}
  		}
 // 	}
@@ -136,13 +135,12 @@ DBusHandlerResult NDBusConnection::nmd_dbus_filter (
  	else if (dbus_message_is_signal (msg, NM_DBUS_INTERFACE, "WirelessNetworkDisappeared")) {
  		char* obj_path = NULL;
  		char* net_path = NULL;
-
+qDebug() << "WirelessNetworkDisappeared";
  		if (dbus_message_get_args (msg, NULL, DBUS_TYPE_OBJECT_PATH, &obj_path,
  						      DBUS_TYPE_OBJECT_PATH, &net_path, DBUS_TYPE_INVALID)) {
-			dev = _ctx->getManager()->getDevice(obj_path);
+			dev = _ctx->getManager()->getWirelessDevice();
 			if (dev)
-					NNetworkDBusInterface::updateNetwork (
-						dev->getNetwork(net_path), "WirelessNetworkDisappeared");
+					NDeviceDBusInterface::updateDevice(dev, "WirelessNetworkDisappeared");
 			}
 
 			// 			DeviceStoreDBus::removeNetwork (obj_path, net_path);
@@ -157,7 +155,7 @@ DBusHandlerResult NDBusConnection::nmd_dbus_filter (
  		char* obj_path = NULL;
  		char* net_path = NULL;
  		int   strength = -1;
-
+		qDebug() << "WirelessNetworkStrengthChanged";
  		if (dbus_message_get_args (msg, NULL, DBUS_TYPE_OBJECT_PATH, &obj_path,
  						      DBUS_TYPE_OBJECT_PATH, &net_path,
  						      DBUS_TYPE_INT32,       &strength, DBUS_TYPE_INVALID)) {
@@ -175,7 +173,7 @@ DBusHandlerResult NDBusConnection::nmd_dbus_filter (
  	else if (dbus_message_is_signal (msg, NM_DBUS_INTERFACE, "DeviceActivationStage")) {
  		char*      obj_path  = NULL;
  		NMActStage act_stage = NM_ACT_STAGE_UNKNOWN;
-//
+qDebug() << "DeviceActivationStage";
  		if (dbus_message_get_args (msg, NULL, DBUS_TYPE_OBJECT_PATH, &obj_path,
  				                      DBUS_TYPE_UINT32,      &act_stage, DBUS_TYPE_INVALID)) {
 			dev = _ctx->getManager()->getDevice(obj_path);
@@ -201,9 +199,7 @@ DBusHandlerResult NDBusConnection::nmd_dbus_filter (
  				                      DBUS_TYPE_OBJECT_PATH, &net_path, DBUS_TYPE_INVALID)) {
 			dev = _ctx->getManager()->getDevice(dev_path);
 			if (dev){
-	
-				NNetworkDBusInterface::updateNetwork (dev->getNetwork(net_path), ""); //TODO Do we need this? It will be called from updateDevice
-				NDeviceDBusInterface::updateDevice (dev, "");
+				NDeviceDBusInterface::updateDevice (dev, "DeviceActivationFailed");
 			}
 		}
 	}

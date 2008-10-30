@@ -12,13 +12,9 @@ public:
 	~NOverView();
 public slots:
 signals:
-	void createWireConfigQueryDlg(QDialog *);
-	void createWirelessConfigQueryDlg(QDialog *);
-
+	void networkConfigQuery(QDialog *);
 protected:
 	void keyPressEvent(QKeyEvent *);
-private:
-	bool isLanDetected(void) const;
 
 };
 

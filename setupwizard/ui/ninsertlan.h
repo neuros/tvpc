@@ -11,7 +11,7 @@ public:
 	NInsertLAN(QDialog *parent = 0);
 	~NInsertLAN();
 signals:
-
+	void checkLanInserted(QDialog *);
 protected:
 	void keyPressEvent(QKeyEvent *);
 };

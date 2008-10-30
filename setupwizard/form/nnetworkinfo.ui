@@ -1,0 +1,261 @@
+<ui version="4.0" >
+ <class>NNetworkInfoForm</class>
+ <widget class="QWidget" name="NNetworkInfoForm" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>652</width>
+    <height>533</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Network Information</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3" >
+   <item row="1" column="0" >
+    <spacer name="horizontalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>58</width>
+       <height>343</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1" >
+    <layout class="QGridLayout" name="gridLayout_2" >
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Network:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="label_2" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Hidden:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="label_4" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Signal Strength:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="label_6" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>mode:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" >
+      <widget class="QLabel" name="label_9" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Frequency:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" >
+      <widget class="QLabel" name="label_7" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Encrypted:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" >
+      <widget class="QLabel" name="label_12" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Rate:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="3" >
+    <layout class="QGridLayout" name="gridLayout" >
+     <item row="1" column="0" >
+      <widget class="QLabel" name="hidden" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Unknown</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="signal" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Unknown</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="mode" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Unknown</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" >
+      <widget class="QLabel" name="freq" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Unknown</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" >
+      <widget class="QLabel" name="encrypt" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Unknown</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" >
+      <widget class="QLabel" name="rate" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Unknown</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="network" >
+       <property name="font" >
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Unknown</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="4" >
+    <spacer name="horizontalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>118</width>
+       <height>343</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="3" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>133</width>
+       <height>75</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="1" >
+    <spacer name="verticalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>76</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="2" >
+    <spacer name="horizontalSpacer_3" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>50</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

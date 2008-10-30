@@ -15,7 +15,7 @@ void NWireConfigQuery::keyPressEvent(QKeyEvent *e)
 {
 	switch (e->key()) {
 	case Qt::Key_Left:
-		close();
+		emit destroyed();
 		break;
 	default:
 		break;

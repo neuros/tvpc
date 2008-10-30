@@ -13,7 +13,8 @@ public:
 public slots:
 
 signals:
-	void createInserLanDlg(QDialog *dlg);
+	void createInserLanDlg(QDialog *);
+	void createNetworkListForm(QWidget *);
 protected:
 	void keyPressEvent(QKeyEvent *);
 };

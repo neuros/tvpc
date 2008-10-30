@@ -17,7 +17,7 @@ void NSelectMode::keyPressEvent(QKeyEvent *e)
 {
 	switch (e->key()) {
 	case Qt::Key_Left:
-		close();
+		emit destroyed();
     break;
 	case Qt::Key_Right:
 	case Qt::Key_Enter:
