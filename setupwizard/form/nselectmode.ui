@@ -1,16 +1,16 @@
 <ui version="4.0" >
- <class>NSelectModeDlg</class>
- <widget class="QDialog" name="NSelectModeDlg" >
+ <class>NSelectModeForm</class>
+ <widget class="QWidget" name="NSelectModeForm" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>685</width>
-    <height>461</height>
+    <width>832</width>
+    <height>495</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>select mode</string>
+   <string>Select setup mode</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" >
    <item row="0" column="1" >
@@ -20,8 +20,8 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>20</width>
-       <height>65</height>
+       <width>747</width>
+       <height>99</height>
       </size>
      </property>
     </spacer>
@@ -48,8 +48,8 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>50</width>
-       <height>20</height>
+       <width>23</width>
+       <height>189</height>
       </size>
      </property>
     </spacer>
@@ -58,7 +58,7 @@
     <widget class="QListWidget" name="selectModeList" >
      <property name="minimumSize" >
       <size>
-       <width>550</width>
+       <width>750</width>
        <height>0</height>
       </size>
      </property>
@@ -75,12 +75,12 @@
      </property>
      <item>
       <property name="text" >
-       <string>Guided Setup (for beginners)</string>
+       <string>         Guided Setup (for beginners)</string>
       </property>
      </item>
      <item>
       <property name="text" >
-       <string>Advanced Setup (for experts)</string>
+       <string>         Advanced Setup (for experts)</string>
       </property>
      </item>
     </widget>
@@ -92,8 +92,8 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>49</width>
-       <height>20</height>
+       <width>23</width>
+       <height>189</height>
       </size>
      </property>
     </spacer>
@@ -105,7 +105,7 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>20</width>
+       <width>747</width>
        <height>108</height>
       </size>
      </property>

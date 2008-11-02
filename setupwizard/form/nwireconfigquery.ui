@@ -1,12 +1,12 @@
 <ui version="4.0" >
- <class>NWireConfigQueryDlg</class>
- <widget class="QDialog" name="NWireConfigQueryDlg" >
+ <class>NWireConfigQueryForm</class>
+ <widget class="QWidget" name="NWireConfigQueryForm" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
     <width>990</width>
-    <height>650</height>
+    <height>648</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -21,7 +21,7 @@
      <property name="sizeHint" stdset="0" >
       <size>
        <width>957</width>
-       <height>38</height>
+       <height>58</height>
       </size>
      </property>
     </spacer>
@@ -134,13 +134,26 @@
      <property name="sizeHint" stdset="0" >
       <size>
        <width>957</width>
-       <height>37</height>
+       <height>59</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="4" column="0" >
+   <item rowspan="2" row="4" column="0" colspan="2" >
     <spacer name="horizontalSpacer_5" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>963</width>
+       <height>253</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item rowspan="2" row="4" column="2" >
+    <spacer name="horizontalSpacer_6" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
@@ -152,7 +165,7 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="1" >
+   <item row="5" column="1" >
     <widget class="QListWidget" name="configqurylist" >
      <property name="minimumSize" >
       <size>
@@ -199,20 +212,7 @@
      </item>
     </widget>
    </item>
-   <item row="4" column="2" >
-    <spacer name="horizontalSpacer_6" >
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>75</width>
-       <height>297</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="1" >
+   <item row="6" column="1" >
     <spacer name="verticalSpacer" >
      <property name="orientation" >
       <enum>Qt::Vertical</enum>

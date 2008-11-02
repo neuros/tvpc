@@ -69,12 +69,14 @@ NDevice *NNetworkManager::getDevice(const QString &obj_path)
 
 void NNetworkManager::emitNetworkStrengthChange(NNetwork *net)
 {
+	qDebug() << "emitNetworkStrengthChange=========";
+
 	emit networkStrengthChange(net);
 }
 
 void NNetworkManager::emitNetworkInfoRefresh(NDevice *dev)
 {
-	qDebug() << "emitNetworkInfoRefresh";
+	qDebug() << "emitNetworkInfoRefresh=========";
 	emit networkInfoRefresh(dev);
 }
 

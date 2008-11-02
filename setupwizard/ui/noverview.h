@@ -3,16 +3,17 @@
 #include "ui_noverview.h"
 #include <QKeyEvent>
 
-class NOverView : public QDialog, private Ui::NOverViewDlg
+class NOverViewForm : public QWidget, private Ui::NOverViewForm
 {
 	Q_OBJECT
 
 public:
-	NOverView(QDialog *parent = 0);
-	~NOverView();
+	NOverViewForm(QWidget *parent = 0);
+	~NOverViewForm();
 public slots:
 signals:
-	void networkConfigQuery(QDialog *);
+	void createNetworkConfigQueryForm(QWidget *);
+	void quit(QWidget *);
 protected:
 	void keyPressEvent(QKeyEvent *);
 

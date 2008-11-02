@@ -3,17 +3,17 @@
 #include "ui_nselectmode.h"
 #include <QKeyEvent>
 
-class NSelectMode : public QDialog, private Ui::NSelectModeDlg
+class NSelectModeForm : public QWidget, private Ui::NSelectModeForm
 {
 	Q_OBJECT
 
 public:
-	NSelectMode(QDialog *parent = 0);
-	~NSelectMode();
+	NSelectModeForm(QWidget *parent = 0);
+	~NSelectModeForm();
 public slots:
 signals:
-	void createOverViewDlg(QDialog *);
-
+	void createOverViewForm(QWidget *);
+	void quit(QWidget *);
 protected:
 	void keyPressEvent(QKeyEvent *);
 };

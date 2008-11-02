@@ -2,29 +2,29 @@
 #include "ninsertlan.h"
 #include <QDesktopWidget>
 
-NWirelessConfigQuery::NWirelessConfigQuery(QDialog *parent)
-	: QDialog(parent)
+NWirelessConfigQueryForm::NWirelessConfigQueryForm(QWidget *parent)
+	: QWidget(parent)
 {
 	setupUi(this);
 }
 
-NWirelessConfigQuery::~NWirelessConfigQuery()
+NWirelessConfigQueryForm::~NWirelessConfigQueryForm()
 {
 
 }
 
-void NWirelessConfigQuery::keyPressEvent(QKeyEvent *e)
+void NWirelessConfigQueryForm::keyPressEvent(QKeyEvent *e)
 {
 	switch (e->key()) {
 	case Qt::Key_Left:
-		emit destroyed();
+		emit quit(this);
 		break;
 	case Qt::Key_Right:
 	case Qt::Key_Enter:
 		if (selectList->currentRow() == 0) {
 			emit createNetworkListForm(this);
 		} else if (selectList->currentRow() == 1) {
-			emit createInserLanDlg(this);
+			emit createInserLanForm(this);
 		}
 		break;
 	default:

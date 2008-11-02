@@ -1,28 +1,28 @@
 #include "nselectmode.h"
 #include <QDesktopWidget>
 
-NSelectMode::NSelectMode(QDialog *parent)
-	: QDialog(parent)
+NSelectModeForm::NSelectModeForm(QWidget *parent)
+	: QWidget(parent)
 {
 	setupUi(this);
 
 }
 
-NSelectMode::~NSelectMode()
+NSelectModeForm::~NSelectModeForm()
 {
 
 }
 
-void NSelectMode::keyPressEvent(QKeyEvent *e)
+void NSelectModeForm::keyPressEvent(QKeyEvent *e)
 {
 	switch (e->key()) {
 	case Qt::Key_Left:
-		emit destroyed();
+		emit quit(this);
     break;
 	case Qt::Key_Right:
 	case Qt::Key_Enter:
 		if (selectModeList->currentRow() == 0) {
-			emit createOverViewDlg(this);
+			emit createOverViewForm(this);
 		}
 		break;
 	default:

@@ -1,16 +1,16 @@
 <ui version="4.0" >
- <class>NInsertLANDlg</class>
- <widget class="QDialog" name="NInsertLANDlg" >
+ <class>NInsertLANForm</class>
+ <widget class="QWidget" name="NInsertLANForm" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>918</width>
-    <height>603</height>
+    <width>921</width>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Insert LAN cable</string>
+   <string>lan detected</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" >
    <item row="0" column="1" >
@@ -20,7 +20,7 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>20</width>
+       <width>445</width>
        <height>95</height>
       </size>
      </property>
@@ -33,18 +33,18 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>74</width>
+       <width>75</width>
        <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
    <item row="1" column="1" >
-    <layout class="QVBoxLayout" name="verticalLayout_2" >
+    <layout class="QVBoxLayout" name="verticalLayout_11" >
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout" >
+      <layout class="QVBoxLayout" name="verticalLayout_12" >
        <item>
-        <widget class="QLabel" name="label" >
+        <widget class="QLabel" name="label_16" >
          <property name="font" >
           <font>
            <pointsize>30</pointsize>
@@ -59,7 +59,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_2" >
+        <widget class="QLabel" name="label_17" >
          <property name="font" >
           <font>
            <pointsize>30</pointsize>
@@ -74,7 +74,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_3" >
+        <widget class="QLabel" name="label_18" >
          <property name="font" >
           <font>
            <pointsize>30</pointsize>
@@ -104,7 +104,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QListWidget" name="selectList" >
+      <widget class="QListWidget" name="selectlist" >
        <property name="maximumSize" >
         <size>
          <width>16777215</width>
@@ -115,6 +115,12 @@
         <font>
          <pointsize>30</pointsize>
         </font>
+       </property>
+       <property name="verticalScrollBarPolicy" >
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy" >
+        <enum>Qt::ScrollBarAsNeeded</enum>
        </property>
        <property name="currentRow" >
         <number>0</number>
@@ -140,7 +146,7 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>74</width>
+       <width>76</width>
        <height>20</height>
       </size>
      </property>
@@ -153,7 +159,7 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>20</width>
+       <width>446</width>
        <height>94</height>
       </size>
      </property>

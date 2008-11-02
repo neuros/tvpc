@@ -3,15 +3,17 @@
 #include "ui_ninsertlan.h"
 #include <QKeyEvent>
 
-class NInsertLAN : public QDialog, private Ui::NInsertLANDlg
+class NInsertLANForm : public QWidget, private Ui::NInsertLANForm
 {
 	Q_OBJECT
 
 public:
-	NInsertLAN(QDialog *parent = 0);
-	~NInsertLAN();
+	NInsertLANForm(QWidget *parent = 0);
+	~NInsertLANForm();
 signals:
-	void checkLanInserted(QDialog *);
+	void checkLanInserted(QWidget *);
+	void createNetworkListForm(QWidget *);
+	void quit(QWidget *);
 protected:
 	void keyPressEvent(QKeyEvent *);
 };

@@ -1,6 +1,7 @@
 #ifndef _NDEVICE_INFORMATION_H__
 #define _NDEVICE_INFORMATION_H__
 #include "ui_ndeviceinfo.h"
+#include "dbus/NNetworkTools.h"
 #include <QKeyEvent>
 class NDeviceInformation : public QWidget, private Ui::NDeviceInfoForm
 {
@@ -10,7 +11,9 @@ public:
 	~NDeviceInformation();
 
 public slots:
-	void updateDeviceInfo();
+	void updateDeviceInfo(NDevice *);
+signals:
+	void quit(QWidget *);
 protected:
 	void keyPressEvent(QKeyEvent *);
 };

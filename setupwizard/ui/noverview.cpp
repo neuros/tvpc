@@ -1,26 +1,26 @@
 #include "noverview.h"
 #include <QDesktopWidget>
 
-NOverView::NOverView(QDialog *parent)
-	:QDialog(parent)
+NOverViewForm::NOverViewForm(QWidget *parent)
+	:QWidget(parent)
 {
 	setupUi(this);
 }
 
-NOverView::~NOverView()
+NOverViewForm::~NOverViewForm()
 {
 
 }
 
-void NOverView::keyPressEvent(QKeyEvent *e)
+void NOverViewForm::keyPressEvent(QKeyEvent *e)
 {
 	switch (e->key()) {
 	case Qt::Key_Left:
-		emit destroyed();
+		emit quit(this);
 		break;
 	case Qt::Key_Right:
 	case Qt::Key_Enter:
-		emit networkConfigQuery(this);
+		emit createNetworkConfigQueryForm(this);
 		break;
 	default:
 		break;

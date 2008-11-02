@@ -5,19 +5,22 @@
 #include "dbus/NDevice.h"
 #include <QKeyEvent>
 
-class NNetworkSSIDList : public QWidget , private Ui::NNetworkListWidget
+class NNetworkSSIDListForm : public QWidget , private Ui::NNetworkListForm
 {
 	Q_OBJECT
 
 public:
-	NNetworkSSIDList(QWidget *parent = 0);
-	~NNetworkSSIDList();
+	NNetworkSSIDListForm(QWidget *parent = 0);
+	~NNetworkSSIDListForm();
 
 public slots:
 	void updateNetworkList(const NNetworkList &list);
 	void updateNetworkList(NDevice *dev);
 	void updateSignalStrength(NNetwork *net);
-
+signals:
+	void quit(QWidget *);
+	void createDeviceInfoForm(QWidget *);
+	void createNetworkInfoForm(QWidget *, int);
 protected:
 	void keyPressEvent(QKeyEvent *);
 };

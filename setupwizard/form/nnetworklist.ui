@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>NNetworkListWidget</class>
- <widget class="QWidget" name="NNetworkListWidget" >
+ <class>NNetworkListForm</class>
+ <widget class="QWidget" name="NNetworkListForm" >
   <property name="geometry" >
    <rect>
     <x>0</x>

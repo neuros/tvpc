@@ -3,18 +3,18 @@
 #include "ndeviceinfo.h"
 #include <QDesktopWidget>
 
-NNetworkSSIDList::NNetworkSSIDList(QWidget *parent)
+NNetworkSSIDListForm::NNetworkSSIDListForm(QWidget *parent)
 	:QWidget(parent)
 {
 	setupUi(this);
 }
 
-NNetworkSSIDList::~NNetworkSSIDList()
+NNetworkSSIDListForm::~NNetworkSSIDListForm()
 {
 
 }
 
-void NNetworkSSIDList::updateNetworkList(const NNetworkList &list)
+void NNetworkSSIDListForm::updateNetworkList(const NNetworkList &list)
 {
 	int i;
 	networkList->clear();
@@ -32,12 +32,12 @@ void NNetworkSSIDList::updateNetworkList(const NNetworkList &list)
 	}
 }
 
-void NNetworkSSIDList::updateSignalStrength(NNetwork *net)
+void NNetworkSSIDListForm::updateSignalStrength(NNetwork *net)
 {
 	qDebug() <<"network" << net->getEssid() << "Strength = " << net->getStrength();
 }
 
-void NNetworkSSIDList::updateNetworkList(NDevice *dev)
+void NNetworkSSIDListForm::updateNetworkList(NDevice *dev)
 {
 	if (!dev)
 		return;
@@ -45,21 +45,17 @@ void NNetworkSSIDList::updateNetworkList(NDevice *dev)
 	updateNetworkList(dev->getNetworks());
 }
 
-void NNetworkSSIDList::keyPressEvent(QKeyEvent *e)
+void NNetworkSSIDListForm::keyPressEvent(QKeyEvent *e)
 {
 	switch (e->key()) {
 	case Qt::Key_Left:
-		emit destroyed();
+		emit quit(this);
 		break;
 	case Qt::Key_A:
-	{
-		NDeviceInformation *info = new NDeviceInformation();
-		if (info) {
-			info->setAttribute(Qt::WA_DeleteOnClose, true);
-			info->resize(QApplication::desktop()->size());
-			info->show();
-		}
-	}
+		emit createDeviceInfoForm(this);
+		break;
+	case Qt::Key_H:
+		emit createNetworkInfoForm(this, networkList->currentRow());
 		break;
 	default:
 		break;

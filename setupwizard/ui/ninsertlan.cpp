@@ -1,26 +1,28 @@
 #include "ninsertlan.h"
 
-NInsertLAN::NInsertLAN(QDialog *parent)
-	:QDialog(parent)
+NInsertLANForm::NInsertLANForm(QWidget *parent)
+	:QWidget(parent)
 {
 	setupUi(this);
 }
 
-NInsertLAN::~NInsertLAN()
+NInsertLANForm::~NInsertLANForm()
 {
 
 }
 
-void NInsertLAN::keyPressEvent(QKeyEvent *e)
+void NInsertLANForm::keyPressEvent(QKeyEvent *e)
 {
 	switch (e->key()) {
 	case Qt::Key_Left:
-		emit destroyed();
+		emit quit(this);
 		break;
 	case Qt::Key_Right:
 	case Qt::Key_Enter:
-		if (selectList->currentRow() == 0) {
+		if (selectlist->currentRow() == 0) {
 			emit checkLanInserted(this);
+		} else if (selectlist->currentRow() == 1) {
+			emit createNetworkListForm(this);
 		}
 		break;
 	default:

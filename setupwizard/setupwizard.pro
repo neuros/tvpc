@@ -34,7 +34,9 @@ HEADERS += dbus/NDBusConnection.h \
            ui/nwireconfigquery.h \
            ui/nwirelessconfigquery.h \
 	   ui/nnetworklist.h \
-	   ui/ndeviceinfo.h
+	   ui/ndeviceinfo.h \
+	   ui/nsetupwizardmanager.h \
+	   ui/nnetworkinfo.h
 FORMS += form/ninsertlan.ui \
          form/noverview.ui \
          form/nselectmode.ui \
@@ -42,7 +44,8 @@ FORMS += form/ninsertlan.ui \
          form/nwireconfigquery.ui \
          form/nwirelessconfigquery.ui \
 	 form/nnetworklist.ui \
-	 form/ndeviceinfo.ui
+	 form/ndeviceinfo.ui \
+	 form/nnetworkinfo.ui
 SOURCES += dbus/NDBusConnection.cpp \
            dbus/NDevice.cpp \
            dbus/NDeviceDBusInterface.cpp \
@@ -63,4 +66,6 @@ SOURCES += dbus/NDBusConnection.cpp \
            ui/nwireconfigquery.cpp \
            ui/nwirelessconfigquery.cpp \
 	   ui/nnetworklist.cpp \
-	   ui/ndeviceinfo.cpp
+	   ui/ndeviceinfo.cpp \
+	   ui/nsetupwizardmanager.cpp \
+	   ui/nnetworkinfo.cpp

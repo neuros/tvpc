@@ -3,18 +3,20 @@
 #include "ui_nwirelessconfigquery.h"
 #include <QKeyEvent>
 
-class NWirelessConfigQuery : public QDialog, private Ui::NWirelessConfigQueryDlg
+class NWirelessConfigQueryForm : public QWidget, private Ui::NWirelessConfigQueryForm
 {
 	Q_OBJECT
 
 public:
-	NWirelessConfigQuery(QDialog *parent = 0);
-	~NWirelessConfigQuery();
+	NWirelessConfigQueryForm(QWidget *parent = 0);
+	~NWirelessConfigQueryForm();
 public slots:
 
 signals:
-	void createInserLanDlg(QDialog *);
+	void createInserLanForm(QWidget *);
 	void createNetworkListForm(QWidget *);
+
+	void quit(QWidget *);
 protected:
 	void keyPressEvent(QKeyEvent *);
 };

@@ -3,13 +3,17 @@
 #include "ui_nwireconfigquery.h"
 #include <QKeyEvent>
 
-class NWireConfigQuery : public QDialog, private Ui::NWireConfigQueryDlg
+class NWireConfigQueryForm : public QWidget, private Ui::NWireConfigQueryForm
 {
 	Q_OBJECT
 
 public:
-	NWireConfigQuery(QDialog *parent = 0);
-	~NWireConfigQuery();
+	NWireConfigQueryForm(QWidget *parent = 0);
+	~NWireConfigQueryForm();
+public slots:
+signals:
+	void quit(QWidget *);
+	void createNetworkListForm(QWidget *);
 protected:
 	void keyPressEvent(QKeyEvent *);
 };

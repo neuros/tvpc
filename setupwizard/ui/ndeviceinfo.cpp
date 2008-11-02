@@ -1,12 +1,9 @@
 #include "ndeviceinfo.h"
-#include "dbus/NNetworkTools.h"
 
 NDeviceInformation::NDeviceInformation(QWidget *parent)
 	: QWidget(parent)
 {
 	setupUi(this);
-
-	updateDeviceInfo();
 }
 
 NDeviceInformation::~NDeviceInformation()
@@ -14,9 +11,8 @@ NDeviceInformation::~NDeviceInformation()
 
 }
 
-void NDeviceInformation::updateDeviceInfo()
+void NDeviceInformation::updateDeviceInfo(NDevice *dev)
 {
-    NDevice *dev = NNetworkManager::getInstance()->getActiveDevice();
 	if (!dev)
 		return;
 
@@ -39,7 +35,7 @@ void NDeviceInformation::updateDeviceInfo()
 
 void NDeviceInformation::keyPressEvent(QKeyEvent *e)
 {
-	close();
+	emit quit(this);
 
 	e->ignore();
 }
