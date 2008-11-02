@@ -189,7 +189,7 @@ void NSetupWizardManager::createInserLanForm(QWidget *form)
 
 void NSetupWizardManager::createNetworkConfigQueryForm(QWidget *form)
 {
-	if (!isLanDetected() == false) {
+	if (isLanDetected() == false) {
 		createWirelessConfigQueryForm(form);
 	} else {
 		createWireConfigQueryForm(form);
