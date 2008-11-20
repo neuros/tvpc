@@ -20,9 +20,14 @@ public slots:
 signals:
 	void quit(QWidget *);
 	void createDeviceInfoForm(QWidget *);
-	void createNetworkInfoForm(QWidget *, int);
+	void createNetworkInfoForm(QWidget *, NNetwork *);
+	void createSelectIPMethodForm(QWidget *, NNetwork *);
+	void createInputSSIDPasswordForm(QWidget *, NNetwork *);
 protected:
 	void keyPressEvent(QKeyEvent *);
+
+private:
+	NNetworkList _list;
 };
 
 #endif /* _NNETWORK_LIST_H__ */

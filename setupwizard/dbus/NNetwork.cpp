@@ -2,8 +2,8 @@
 #include "NNetworkDBusInterface.h"
 #include "NDevice.h"
 
-NNetwork::NNetwork (const QString & obj_path, NDevice *dev):QObject(),/* _encryption (0),*/ _obj_path (obj_path), _essid (""),
-	 _hw_address (""),
+NNetwork::NNetwork (const QString & obj_path, NDevice *dev):QObject(), 
+	_obj_path (obj_path), _essid (""), _hw_address (""),
 		  _strength (0), _frequency (0), _rate (0), _active( false ), _mode (0),
 		  _capabilities( NM_DEVICE_CAP_NONE ),  _dev(dev)
 {
@@ -169,7 +169,6 @@ void NNetwork::setHidden (bool hidden)
 
 void NNetwork::emitStrengthChange(NNetwork *net)
 {
-	qDebug() << "strength changed" << net->getStrength();
 	emit strengthChange(net);
 }
 

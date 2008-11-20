@@ -19,9 +19,9 @@ void NNetworkSSIDListForm::updateNetworkList(const NNetworkList &list)
 	int i;
 	networkList->clear();
 	for (i=0; i<list.count(); i++) {
-        networkList->insertItem(i, "            " + list.at(i)->getEssid());
+        networkList->addItem("            " + list.at(i)->getEssid());
 	}
-	networkList->insertItem(i, "            Other ...");
+	networkList->addItem("            Other ...");
 
 	if (networkList->count())
 		networkList->setCurrentRow(0);
@@ -30,6 +30,8 @@ void NNetworkSSIDListForm::updateNetworkList(const NNetworkList &list)
 			connect(NNetworkManager::getInstance(), SIGNAL(networkStrengthChange(NNetwork *)),
 					this, SLOT(updateSignalStrength(NNetwork *)));
 	}
+
+	_list = list;
 }
 
 void NNetworkSSIDListForm::updateSignalStrength(NNetwork *net)
@@ -47,6 +49,8 @@ void NNetworkSSIDListForm::updateNetworkList(NDevice *dev)
 
 void NNetworkSSIDListForm::keyPressEvent(QKeyEvent *e)
 {
+	NNetwork *net = NULL;
+
 	switch (e->key()) {
 	case Qt::Key_Left:
 		emit quit(this);
@@ -55,7 +59,24 @@ void NNetworkSSIDListForm::keyPressEvent(QKeyEvent *e)
 		emit createDeviceInfoForm(this);
 		break;
 	case Qt::Key_H:
-		emit createNetworkInfoForm(this, networkList->currentRow());
+		if (networkList->currentRow() < _list.count())
+			net = _list.at(networkList->currentRow());
+
+		emit createNetworkInfoForm(this, net);
+		break;
+	case Qt::Key_Right:
+	case Qt::Key_Enter:
+
+		if (networkList->currentRow() < _list.count()) {
+			net = _list.at(networkList->currentRow());
+			if (net->isEncrypted() == true) {
+				emit createInputSSIDPasswordForm(this, net);
+			} else {
+				emit createSelectIPMethodForm(this, net);
+			}
+		} else {
+
+		}
 		break;
 	default:
 		break;

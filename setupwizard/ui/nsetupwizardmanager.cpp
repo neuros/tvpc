@@ -6,7 +6,7 @@ NSetupWizardManager::NSetupWizardManager()
 	: QObject(), _splashForm(NULL), _selectModeForm(NULL),
 	_overViewForm(NULL), _wirelessConfigForm(NULL), _wireConfigForm(NULL),
 	_wirelessNetworkListForm(NULL), _insertLanForm(NULL), _deviceInfoForm(NULL),
-	_networkInfoForm(NULL)
+	_networkInfoForm(NULL), _selectipmethodForm(NULL), _inputssidpasswordForm(NULL)
 {
 
 }
@@ -31,6 +31,10 @@ NSetupWizardManager::~NSetupWizardManager()
 		delete _deviceInfoForm;
 	if (_networkInfoForm)
 		delete _networkInfoForm;
+	if (_selectipmethodForm)
+		delete _selectipmethodForm;
+	if (_inputssidpasswordForm)
+		delete _inputssidpasswordForm;
 }
 
 NSetupWizardManager *NSetupWizardManager::getInstance()
@@ -153,8 +157,12 @@ void NSetupWizardManager::createNetworkListForm(QWidget *form)
 				this, SLOT(raiseForm(QWidget *)));
 		connect(_wirelessNetworkListForm, SIGNAL(createDeviceInfoForm(QWidget *)),
 				this, SLOT(createDeviceInfoForm(QWidget *)));
-		connect(_wirelessNetworkListForm, SIGNAL(createNetworkInfoForm(QWidget *, int)),
-				this, SLOT(createNetworkInfoForm(QWidget *, int)));
+		connect(_wirelessNetworkListForm, SIGNAL(createNetworkInfoForm(QWidget *, NNetwork *)),
+				this, SLOT(createNetworkInfoForm(QWidget *, NNetwork *)));
+		connect(_wirelessNetworkListForm, SIGNAL(createSelectIPMethodForm(QWidget *, NNetwork *)),
+				this, SLOT(createSelectIPMethodForm(QWidget *, NNetwork *)));
+		connect(_wirelessNetworkListForm, SIGNAL(createInputSSIDPasswordForm(QWidget *, NNetwork *)),
+				this, SLOT(createInputSSIDPasswordForm(QWidget *, NNetwork *)));
 	}
 
 	NDevice *dev = NNetworkManager::getInstance()->getWirelessDevice();
@@ -213,8 +221,11 @@ void NSetupWizardManager::createDeviceInfoForm(QWidget *form)
 	lowerForm(form);
 }
 
-void NSetupWizardManager::createNetworkInfoForm(QWidget *form, int index)
+void NSetupWizardManager::createNetworkInfoForm(QWidget *form, NNetwork *net)
 {
+	if (!net)
+		return;
+
 	if (_networkInfoForm == NULL) {
 		_networkInfoForm = new NNetworkInfoForm();
 		_networkInfoForm->resize(QApplication::desktop()->size());
@@ -223,16 +234,64 @@ void NSetupWizardManager::createNetworkInfoForm(QWidget *form, int index)
 				this, SLOT(raiseForm(QWidget *)));
 	}
 
-	NDevice *dev = NNetworkManager::getInstance()->getActiveDevice();
-	if (dev) {
-		NNetworkList list = dev->getNetworks();
-		if (index < list.count() && index >= 0) {
-			static_cast<NNetworkInfoForm *>(_networkInfoForm)->updateNetworkInfo(list.at(index));
-		}
-	}
+	static_cast<NNetworkInfoForm *>(_networkInfoForm)->updateNetworkInfo(net);
+
 	_networkInfoForm->show();
 
 	lowerForm(form);
+}
+
+void NSetupWizardManager::createSelectIPMethodForm(QWidget *form, NNetwork *net)
+{
+	qDebug() << "createSelectIPMethodForm()";
+
+	if (_selectipmethodForm == NULL) {
+		_selectipmethodForm = new NSelectIPMethodForm();
+		_selectipmethodForm->resize(QApplication::desktop()->size());
+
+		connect(_selectipmethodForm, SIGNAL(quit(QWidget *)),
+				this, SLOT(raiseForm(QWidget *)));
+
+	}
+
+	_selectipmethodForm->show();
+
+	lowerForm(form);
+
+	Q_UNUSED(net);
+}
+
+void NSetupWizardManager::createInputSSIDPasswordForm(QWidget *form, NNetwork *net)
+{
+	if (!net)
+		return;
+
+	qDebug() << "createInputSSIDPasswordForm()" << net->getEssid();
+
+	if (_inputssidpasswordForm == NULL) {
+		_inputssidpasswordForm = new NInputSSIDPasswordForm();
+		_inputssidpasswordForm->resize(QApplication::desktop()->size());
+		connect(_inputssidpasswordForm, SIGNAL(quit(QWidget *)),
+				this, SLOT(raiseForm(QWidget *)));
+		connect(_inputssidpasswordForm, SIGNAL(createConnect2NetworkForm(QWidget *, NNetwork *)),
+				this, SLOT(createConnect2NetworkForm(QWidget *, NNetwork *)));
+	}
+
+	static_cast<NInputSSIDPasswordForm *>(_inputssidpasswordForm)->setNetwork(net);
+	_inputssidpasswordForm->show();
+
+	lowerForm(form);
+}
+
+void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NNetwork *net)
+{
+	if (!net)
+		return;
+	qDebug() << "createConnect2NetworkForm() " << net->getEssid();
+
+	if (net->getCapabilities() & NM_802_11_CAP_PROTO_WEP) {
+		qDebug() << "YES";
+	}
 }
 
 bool NSetupWizardManager::isLanDetected() const

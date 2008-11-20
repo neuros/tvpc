@@ -11,6 +11,8 @@
 #include "ninsertlan.h"
 #include "ndeviceinfo.h"
 #include "nnetworkinfo.h"
+#include "nselectipmethod.h"
+#include "ninputssidpassword.h"
 
 class NSetupWizardManager : public QObject
 {
@@ -31,7 +33,10 @@ public slots:
 	void createNetworkListForm(QWidget *widget);
 	void createInserLanForm(QWidget *widget);
 	void createDeviceInfoForm(QWidget *widget);
-	void createNetworkInfoForm(QWidget *widget, int);
+	void createNetworkInfoForm(QWidget *widget, NNetwork *net);
+	void createSelectIPMethodForm(QWidget *widget, NNetwork *net);
+	void createInputSSIDPasswordForm(QWidget *widget, NNetwork *net);
+	void createConnect2NetworkForm(QWidget *widget, NNetwork *net);
 
 	void lowerForm(QWidget *);
 	void raiseForm(QWidget *);
@@ -53,6 +58,8 @@ private:
 	QWidget *_insertLanForm;
 	QWidget *_deviceInfoForm;
 	QWidget *_networkInfoForm;
+	QWidget *_selectipmethodForm;
+	QWidget *_inputssidpasswordForm;
 };
 
 #endif /* _NSETUP_WIZARD_MANAGER_H__ */
