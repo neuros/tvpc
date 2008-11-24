@@ -1,20 +1,10 @@
 #ifndef _NSETUP_WIZARD_MANAGER_H__
 #define _NSETUP_WIZARD_MANAGER_H__
-#include <QObject>
+#include <QWidget>
+#include <QStack>
 #include "dbus/NNetworkTools.h"
-#include "nsplashform.h"
-#include "nselectmode.h"
-#include "noverview.h"
-#include "nwirelessconfigquery.h"
-#include "nwireconfigquery.h"
-#include "nnetworklist.h"
-#include "ninsertlan.h"
-#include "ndeviceinfo.h"
-#include "nnetworkinfo.h"
-#include "nselectipmethod.h"
-#include "ninputssidpassword.h"
 
-class NSetupWizardManager : public QObject
+class NSetupWizardManager : public QWidget
 {
 	Q_OBJECT
 public:
@@ -23,7 +13,12 @@ public:
 
 	static NSetupWizardManager *getInstance();
 	void start();
-
+	enum encryptType {
+		WepASCII,
+		WepHex,
+		Wep,
+		Invalid,
+	};
 public slots:
 	void createSelectModeForm(QWidget *);
 	void createOverViewForm(QWidget *);
@@ -38,10 +33,19 @@ public slots:
 	void createInputSSIDPasswordForm(QWidget *widget, NNetwork *net);
 	void createConnect2NetworkForm(QWidget *widget, NNetwork *net);
 
+	void connecting();
+	void connected();
+	void disconnected();
+
 	void lowerForm(QWidget *);
 	void raiseForm(QWidget *);
 private:
 	bool isLanDetected() const;
+	bool isHex(const QString &num) const;
+	NSetupWizardManager::encryptType safeCheckPassword(
+		const QString &passwd, encryptType type) const;
+	void setupConnections();
+
 private:
 	static NSetupWizardManager *_manager;
 
@@ -60,6 +64,7 @@ private:
 	QWidget *_networkInfoForm;
 	QWidget *_selectipmethodForm;
 	QWidget *_inputssidpasswordForm;
+	QWidget *_connectingForm;
 };
 
 #endif /* _NSETUP_WIZARD_MANAGER_H__ */

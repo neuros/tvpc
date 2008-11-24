@@ -61,13 +61,6 @@ public:
 	void setDefaults (void);
 };
 
-/* EncryptionWEP */
-enum WEPType {
-	WEP_ASCII      = 0,
-	WEP_HEX        = 1,
-	 WEP_PASSPHRASE = 3
-};
-
 enum WEPMethod {
 	WEP_OPEN_SYSTEM = IW_AUTH_ALG_OPEN_SYSTEM,
 	WEP_SHARED_KEY  = IW_AUTH_ALG_SHARED_KEY
@@ -76,6 +69,13 @@ enum WEPMethod {
 class NEncryptionWEP : public NEncryption
 {
 public:
+	/* EncryptionWEP */
+	enum WEPType {
+		WEP_ASCII      = 0,
+		WEP_HEX        = 1,
+		WEP_PASSPHRASE = 3
+	};
+
 	NEncryptionWEP  (WEPType);
 	~NEncryptionWEP ();
 

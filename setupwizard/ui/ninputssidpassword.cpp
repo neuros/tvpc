@@ -41,3 +41,13 @@ bool NInputSSIDPasswordForm::eventFilter(QObject *obj, QEvent *event)
 
 	return QObject::eventFilter(obj, event);
 }
+
+const QString NInputSSIDPasswordForm::password() const
+{
+	return passwordEdit->text();
+}
+
+void NInputSSIDPasswordForm::clearPassword()
+{
+	passwordEdit->clear();
+}

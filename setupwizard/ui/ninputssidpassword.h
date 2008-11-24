@@ -13,6 +13,8 @@ public:
 	~NInputSSIDPasswordForm();
 	void setNetwork(NNetwork *);
 
+	const QString password() const;
+	void clearPassword();
 protected:
 	bool eventFilter(QObject *obj, QEvent *event);
 

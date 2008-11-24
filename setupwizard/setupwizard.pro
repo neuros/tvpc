@@ -38,7 +38,8 @@ HEADERS += dbus/NDBusConnection.h \
 	   ui/nsetupwizardmanager.h \
 	   ui/nnetworkinfo.h \
 	   ui/nselectipmethod.h \
-	   ui/ninputssidpassword.h
+	   ui/ninputssidpassword.h \
+	   ui/nconnecting.h
 FORMS += form/ninsertlan.ui \
          form/noverview.ui \
          form/nselectmode.ui \
@@ -49,7 +50,8 @@ FORMS += form/ninsertlan.ui \
 	 form/ndeviceinfo.ui \
 	 form/nnetworkinfo.ui \
 	 form/nselectipmethod.ui \
-	 form/ninputssidpassword.ui
+	 form/ninputssidpassword.ui \
+	 form/nconnecting.ui
 SOURCES += dbus/NDBusConnection.cpp \
            dbus/NDevice.cpp \
            dbus/NDeviceDBusInterface.cpp \
@@ -74,4 +76,5 @@ SOURCES += dbus/NDBusConnection.cpp \
 	   ui/nsetupwizardmanager.cpp \
 	   ui/nnetworkinfo.cpp \
 	   ui/nselectipmethod.cpp \
-	   ui/ninputssidpassword.cpp
+	   ui/ninputssidpassword.cpp \
+	   ui/nconnecting.cpp

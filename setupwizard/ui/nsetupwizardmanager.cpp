@@ -1,14 +1,28 @@
 #include "nsetupwizardmanager.h"
+#include "nsplashform.h"
+#include "nselectmode.h"
+#include "noverview.h"
+#include "nwirelessconfigquery.h"
+#include "nwireconfigquery.h"
+#include "nnetworklist.h"
+#include "ninsertlan.h"
+#include "ndeviceinfo.h"
+#include "nnetworkinfo.h"
+#include "nselectipmethod.h"
+#include "ninputssidpassword.h"
+#include "nconnecting.h"
 
 NSetupWizardManager *NSetupWizardManager::_manager = NULL;
 
 NSetupWizardManager::NSetupWizardManager()
-	: QObject(), _splashForm(NULL), _selectModeForm(NULL),
+	: QWidget(), _splashForm(NULL), _selectModeForm(NULL),
 	_overViewForm(NULL), _wirelessConfigForm(NULL), _wireConfigForm(NULL),
 	_wirelessNetworkListForm(NULL), _insertLanForm(NULL), _deviceInfoForm(NULL),
-	_networkInfoForm(NULL), _selectipmethodForm(NULL), _inputssidpasswordForm(NULL)
+	_networkInfoForm(NULL), _selectipmethodForm(NULL), _inputssidpasswordForm(NULL),
+	_connectingForm(NULL)
 {
 
+	setupConnections();
 }
 
 NSetupWizardManager::~NSetupWizardManager()
@@ -35,6 +49,8 @@ NSetupWizardManager::~NSetupWizardManager()
 		delete _selectipmethodForm;
 	if (_inputssidpasswordForm)
 		delete _inputssidpasswordForm;
+	if (_connectingForm)
+		delete _connectingForm;
 }
 
 NSetupWizardManager *NSetupWizardManager::getInstance()
@@ -57,6 +73,13 @@ void NSetupWizardManager::start()
 	_splashForm->setGeometry((QApplication::desktop()->size().width() - 300) /2,
 						 (QApplication::desktop()->size().height() - 300)/2, 300, 300);
 	_splashForm->show();
+}
+
+void NSetupWizardManager::setupConnections()
+{
+	connect(_tools.getState(), SIGNAL(connecting()), this, SLOT(connecting()));
+	connect(_tools.getState(), SIGNAL(connected()), this, SLOT(connected()));
+	connect(_tools.getState(), SIGNAL(disconnected()), this, SLOT(disconnected()));
 }
 
 void NSetupWizardManager::lowerForm(QWidget *form)
@@ -285,12 +308,32 @@ void NSetupWizardManager::createInputSSIDPasswordForm(QWidget *form, NNetwork *n
 
 void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NNetwork *net)
 {
-	if (!net)
+	NInputSSIDPasswordForm *passwordForm = static_cast<NInputSSIDPasswordForm *>(form);
+
+	if (!net || !passwordForm)
 		return;
 	qDebug() << "createConnect2NetworkForm() " << net->getEssid();
 
 	if (net->getCapabilities() & NM_802_11_CAP_PROTO_WEP) {
-		qDebug() << "YES";
+		encryptType type;
+		type = safeCheckPassword(passwordForm->password(), Wep);
+		if (type == Invalid) {
+			QMessageBox::critical(this, tr("Invalid password"), tr("The current encryption mode is WEP, please"
+																   " input 5 or 13 or 16 chararcters for ASCII, and 10 or 26 or 32 characters"
+																   " for Hex."));
+
+			passwordForm->clearPassword();
+			return;
+		} else if (type == WepASCII) {
+
+			NEncryption *enc = new NEncryptionWEP(NEncryptionWEP::WEP_ASCII);
+			enc->setSecret(passwordForm->password());
+			net->setEncryption(enc);
+
+			if(net->getDevice())
+				net->getDevice()->activeNetwork(net);
+		}
+
 	}
 }
 
@@ -305,3 +348,66 @@ bool NSetupWizardManager::isLanDetected() const
 
 	return false;
 }
+
+NSetupWizardManager::encryptType NSetupWizardManager::safeCheckPassword(const QString &passwd,
+																		encryptType type) const
+{
+	if (type == Wep) {
+		if (passwd.length() == 5 || passwd.length() == 13 || passwd.length() == 16)
+			return WepASCII;
+		else if (passwd.length() == 10 || passwd.length() == 26 || passwd.length() == 32) {
+			if (isHex(passwd))
+				return WepHex;
+			else
+				return Invalid;
+		} else
+			return Invalid;
+	}
+
+	return Invalid;
+}
+
+bool NSetupWizardManager::isHex(const QString &num) const
+{
+	for (int i=0; i<num.length(); i++) {
+		if (!(num.at(i).isNumber() || (num.at(i).toLower() >= 'a' && 
+									 num.at(i).toLower() <= 'f')))
+			return false;
+	}
+
+	return true;
+}
+
+void NSetupWizardManager::connecting()
+{
+	if (_connectingForm == NULL) {
+		_connectingForm = new NConnectingForm();
+		_connectingForm->resize(QApplication::desktop()->size());
+	}
+
+	_connectingForm->show();
+}
+
+void NSetupWizardManager::connected()
+{
+	if (_connectingForm) {
+		static_cast<NConnectingForm *>(_connectingForm)->stopTimer();
+
+		QMessageBox::information(_connectingForm, tr("Congratulations"), tr("Congratulations! Your TVPC succeeds to connect to network."));
+
+		_connectingForm->hide();
+	}
+}
+
+void NSetupWizardManager::disconnected()
+{
+	if (_connectingForm) {
+		static_cast<NConnectingForm *>(_connectingForm)->stopTimer();
+
+		QMessageBox::information(_connectingForm, tr("Sorry"), tr("Unable to connect to network."));
+
+		_connectingForm->hide();
+	}
+}
+
+
