@@ -36,7 +36,7 @@ void NNetworkSSIDListForm::updateNetworkList(const NNetworkList &list)
 
 void NNetworkSSIDListForm::updateSignalStrength(NNetwork *net)
 {
-	qDebug() <<"network" << net->getEssid() << "Strength = " << net->getStrength();
+
 }
 
 void NNetworkSSIDListForm::updateNetworkList(NDevice *dev)

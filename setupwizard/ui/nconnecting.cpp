@@ -1,5 +1,4 @@
 #include "nconnecting.h"
-
 NConnectingForm::NConnectingForm(QWidget *parent)
 	:QWidget(parent)
 {
@@ -24,6 +23,18 @@ void NConnectingForm::setupConnections()
 void NConnectingForm::stopTimer()
 {
 	timer->stop();
+}
+
+void NConnectingForm::startTimer()
+{
+	timer->start();
+}
+
+void NConnectingForm::on_stopBtn_clicked()
+{
+	stopTimer();
+
+	emit stopConnecting(this);
 }
 
 void NConnectingForm::timeOut()

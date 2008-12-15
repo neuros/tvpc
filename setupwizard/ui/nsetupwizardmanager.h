@@ -37,9 +37,12 @@ public slots:
 	void connected();
 	void disconnected();
 
+	void stopConnecting(QWidget *widget);
+
 	void lowerForm(QWidget *);
 	void raiseForm(QWidget *);
 private:
+	void startConnecting();
 	bool isLanDetected() const;
 	bool isHex(const QString &num) const;
 	NSetupWizardManager::encryptType safeCheckPassword(
@@ -65,6 +68,8 @@ private:
 	QWidget *_selectipmethodForm;
 	QWidget *_inputssidpasswordForm;
 	QWidget *_connectingForm;
+
+	bool _iAmConnecting;
 };
 
 #endif /* _NSETUP_WIZARD_MANAGER_H__ */

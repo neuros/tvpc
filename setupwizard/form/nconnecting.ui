@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>894</width>
+    <width>973</width>
     <height>579</height>
    </rect>
   </property>
@@ -33,11 +33,14 @@
        <pointsize>34</pointsize>
       </font>
      </property>
+     <property name="layoutDirection" >
+      <enum>Qt::LeftToRight</enum>
+     </property>
      <property name="text" >
       <string>Connecting to network</string>
      </property>
      <property name="alignment" >
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

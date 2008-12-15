@@ -138,7 +138,7 @@ void NNetworkState::setState (NMState nmstate)
 		default:
 			break;
 	}
-	qDebug() << "set state to " << stateToString();
+	qDebug() << "\n========" << stateToString() << "========\n";
 
 }
 

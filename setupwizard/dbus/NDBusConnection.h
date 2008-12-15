@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <dbus/dbus.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include <dbus/dbus-glib.h>
 #include <NetworkManager.h>
 
 class NNetworkTools;
@@ -30,7 +29,7 @@ public:
 	DBusConnection *getConnection(void){
 		return _dbus_connection;
 	}
-	static gboolean triggerReconnect(gpointer user_data);
+	static int triggerReconnect(void *user_data);
 	static bool handleUpdateDeviceSignal( DBusMessage * msg );
 
 private:

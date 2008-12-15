@@ -413,7 +413,6 @@ void NDevice:: emitActivating( NDevice * dev )
 }
 void NDevice::emitNetworkFound( NDevice * dev )
 {
-	qDebug() << "network found";
 	emit networkFound( dev );
 }
 
@@ -430,7 +429,6 @@ void NDevice::emitStatusChanged(NDevice *dev)
 
 void NDevice::emitNetworkStrengthChange(NNetwork *net)
 {
-	qDebug() << "NNetwork changed";
 	emit networkStrengthChange(net);
 }
 

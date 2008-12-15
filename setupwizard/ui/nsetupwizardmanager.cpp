@@ -135,8 +135,6 @@ void NSetupWizardManager::createOverViewForm(QWidget *form)
 
 void NSetupWizardManager::createWirelessConfigQueryForm(QWidget *form)
 {
-	qDebug() << "createWirelessConfigQueryForm()";
-
 	if (_wirelessConfigForm == NULL) {
 		_wirelessConfigForm = new NWirelessConfigQueryForm();
 		_wirelessConfigForm->resize(QApplication::desktop()->size());
@@ -156,7 +154,6 @@ void NSetupWizardManager::createWirelessConfigQueryForm(QWidget *form)
 
 void NSetupWizardManager::createWireConfigQueryForm(QWidget *form)
 {
-	qDebug() << "createWireConfigQueryForm()";
 	if (_wireConfigForm == NULL) {
 		_wireConfigForm = new NWireConfigQueryForm();
 		_wireConfigForm->resize(QApplication::desktop()->size());
@@ -266,8 +263,6 @@ void NSetupWizardManager::createNetworkInfoForm(QWidget *form, NNetwork *net)
 
 void NSetupWizardManager::createSelectIPMethodForm(QWidget *form, NNetwork *net)
 {
-	qDebug() << "createSelectIPMethodForm()";
-
 	if (_selectipmethodForm == NULL) {
 		_selectipmethodForm = new NSelectIPMethodForm();
 		_selectipmethodForm->resize(QApplication::desktop()->size());
@@ -288,8 +283,6 @@ void NSetupWizardManager::createInputSSIDPasswordForm(QWidget *form, NNetwork *n
 {
 	if (!net)
 		return;
-
-	qDebug() << "createInputSSIDPasswordForm()" << net->getEssid();
 
 	if (_inputssidpasswordForm == NULL) {
 		_inputssidpasswordForm = new NInputSSIDPasswordForm();
@@ -312,7 +305,6 @@ void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NNetwork *net
 
 	if (!net || !passwordForm)
 		return;
-	qDebug() << "createConnect2NetworkForm() " << net->getEssid();
 
 	if (net->getCapabilities() & NM_802_11_CAP_PROTO_WEP) {
 		encryptType type;
@@ -334,6 +326,41 @@ void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NNetwork *net
 				net->getDevice()->activeNetwork(net);
 		}
 
+	}
+
+	_iAmConnecting = false;
+	startConnecting();
+
+	lowerForm(form);
+}
+
+void NSetupWizardManager::startConnecting()
+{
+	if (_tools.getState()->isSleeping())
+		_tools.getState()->setOfflineMode(false);
+
+	if (!_tools.getState()->isWirelessEnabled())
+		_tools.getState()->setWirelessState(true);
+
+	if (_connectingForm == NULL) {
+		_connectingForm = new NConnectingForm();
+        _connectingForm->resize(QApplication::desktop()->size());
+		connect(_connectingForm, SIGNAL(stopConnecting(QWidget *)), this,
+				SLOT(stopConnecting(QWidget *)));
+	} else {
+		static_cast<NConnectingForm *>(_connectingForm)->startTimer();
+	}
+
+	_connectingForm->show();
+}
+
+void NSetupWizardManager::stopConnecting(QWidget *form)
+{
+	if (form) {
+        _iAmConnecting = false;
+
+		raiseForm(form);
+        _tools.getState()->setWirelessState(false);
 	}
 }
 
@@ -380,17 +407,13 @@ bool NSetupWizardManager::isHex(const QString &num) const
 
 void NSetupWizardManager::connecting()
 {
-	if (_connectingForm == NULL) {
-		_connectingForm = new NConnectingForm();
-		_connectingForm->resize(QApplication::desktop()->size());
-	}
-
-	_connectingForm->show();
+	_iAmConnecting = true;
+	startConnecting();
 }
 
 void NSetupWizardManager::connected()
 {
-	if (_connectingForm) {
+	if (_connectingForm && _iAmConnecting) {
 		static_cast<NConnectingForm *>(_connectingForm)->stopTimer();
 
 		QMessageBox::information(_connectingForm, tr("Congratulations"), tr("Congratulations! Your TVPC succeeds to connect to network."));
@@ -401,7 +424,7 @@ void NSetupWizardManager::connected()
 
 void NSetupWizardManager::disconnected()
 {
-	if (_connectingForm) {
+	if (_connectingForm && _iAmConnecting) {
 		static_cast<NConnectingForm *>(_connectingForm)->stopTimer();
 
 		QMessageBox::information(_connectingForm, tr("Sorry"), tr("Unable to connect to network."));

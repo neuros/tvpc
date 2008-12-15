@@ -6,11 +6,13 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += . dbus form ui
 INCLUDEPATH += . dbus ui \
+		/usr/include/glib-2.0 \
+		/usr/lib/glib-2.0/include \
 		/usr/lib/dbus-1.0/include \
 		/usr/include/dbus-1.0 \
                 /usr/local/include/NetworkManager
 
-LIBS += -ldbus-1 -lhal -lnm-util
+LIBS += -ldbus-1 -lhal -lnm-util -ldbus-glib-1
 
 # Input
 HEADERS += dbus/NDBusConnection.h \

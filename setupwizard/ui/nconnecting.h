@@ -11,10 +11,12 @@ public:
 	~NConnectingForm();
 
 	void stopTimer();
-
+	void startTimer();
 public slots:
 	void timeOut();
-
+	void on_stopBtn_clicked();
+signals:
+	void stopConnecting(QWidget *);
 private:
 	void setupConnections();
 private:
