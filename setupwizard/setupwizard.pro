@@ -13,7 +13,7 @@ INCLUDEPATH += . dbus ui \
                 /usr/local/include/NetworkManager
 
 LIBS += -ldbus-1 -lhal -lnm-util -ldbus-glib-1
-
+QT+=dbus
 # Input
 HEADERS += dbus/NDBusConnection.h \
            dbus/NDevice.h \
@@ -27,6 +27,10 @@ HEADERS += dbus/NDBusConnection.h \
            dbus/NNetworkState.h \
            dbus/NNetworkTools.h \
            dbus/NStateDBusInterface.h \
+	   dbus/NDBusStateTools.h \
+	   dbus/NDBusTools.h \
+	   dbus/NDBusDevice.h \
+	   dbus/NDBusNetwork.h \
            ui/ninsertlan.h \
            ui/noverview.h \
            ui/nselectmode.h \
@@ -63,7 +67,11 @@ SOURCES += dbus/NDBusConnection.cpp \
            dbus/NNetworkManagerInfo.cpp \
            dbus/NNetworkState.cpp \
            dbus/NNetworkTools.cpp \
+	   dbus/NDBusTools.cpp \
+	   dbus/NDBusDevice.cpp \
+	   dbus/NDBusNetwork.cpp \
            dbus/NStateDBusInterface.cpp \
+	   dbus/NDBusStateTools.cpp \
            ui/main.cpp \
            ui/ninsertlan.cpp \
            ui/noverview.cpp \

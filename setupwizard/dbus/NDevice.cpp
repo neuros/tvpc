@@ -335,7 +335,7 @@ NNetwork *NDevice::getNetwork(const QString &obj_path) const
 {
 	NNetworkList::iterator i;
 
-	if (d->networkList.empty ())
+	if (d->networkList.isEmpty ())
 		return NULL;
 
 	for (i = d->networkList.begin (); i != d->networkList.end (); ++i)
