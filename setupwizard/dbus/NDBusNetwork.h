@@ -2,7 +2,6 @@
 #define _NDBUS_NETWORK_H__
 #include <QtDBus/QtDBus>
 #include <QObject>
-#include <NetworkManager.h>
 #include "NDBusEncryption.h"
 
 class NDBusDevice;

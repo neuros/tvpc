@@ -27,6 +27,8 @@ public:
 
 	const QString      getInterface        (void) const;
 	const QDBusObjectPath	  getObjectPath() const;
+	const QString      getProduct          (void) const;
+	const QString      getVendor           (void) const;
     NMDeviceType   getType             (void) const;
 	const QString      getUdi              (void) const;
 	bool         			  isActive            (void) const;
@@ -54,6 +56,8 @@ public:
 	void 		 setInterface        (const QString&);
 	void         setObjectPath       (const QString&);
 	void         setType             (uint);
+	void 		 setVendor (const QString &);
+
 	void         setUdi              (const QString&);
 	void         setActive           (bool);
 	void         setActivationStage  (int);

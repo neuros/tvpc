@@ -77,9 +77,7 @@ void NSetupWizardManager::start()
 
 void NSetupWizardManager::setupConnections()
 {
-	connect(_tools.getState(), SIGNAL(connecting()), this, SLOT(connecting()));
-	connect(_tools.getState(), SIGNAL(connected()), this, SLOT(connected()));
-	connect(_tools.getState(), SIGNAL(disconnected()), this, SLOT(disconnected()));
+
 }
 
 void NSetupWizardManager::lowerForm(QWidget *form)
@@ -177,18 +175,19 @@ void NSetupWizardManager::createNetworkListForm(QWidget *form)
 				this, SLOT(raiseForm(QWidget *)));
 		connect(_wirelessNetworkListForm, SIGNAL(createDeviceInfoForm(QWidget *)),
 				this, SLOT(createDeviceInfoForm(QWidget *)));
-		connect(_wirelessNetworkListForm, SIGNAL(createNetworkInfoForm(QWidget *, NNetwork *)),
-				this, SLOT(createNetworkInfoForm(QWidget *, NNetwork *)));
-		connect(_wirelessNetworkListForm, SIGNAL(createSelectIPMethodForm(QWidget *, NNetwork *)),
-				this, SLOT(createSelectIPMethodForm(QWidget *, NNetwork *)));
-		connect(_wirelessNetworkListForm, SIGNAL(createInputSSIDPasswordForm(QWidget *, NNetwork *)),
-				this, SLOT(createInputSSIDPasswordForm(QWidget *, NNetwork *)));
+		connect(_wirelessNetworkListForm, SIGNAL(createNetworkInfoForm(QWidget *, NDBusNetwork *)),
+				this, SLOT(createNetworkInfoForm(QWidget *, NDBusNetwork *)));
+		connect(_wirelessNetworkListForm, SIGNAL(createSelectIPMethodForm(QWidget *, NDBusNetwork *)),
+				this, SLOT(createSelectIPMethodForm(QWidget *, NDBusNetwork *)));
+		connect(_wirelessNetworkListForm, SIGNAL(createInputSSIDPasswordForm(QWidget *, NDBusNetwork *)),
+				this, SLOT(createInputSSIDPasswordForm(QWidget *, NDBusNetwork *)));
 	}
 
-	NDevice *dev = NNetworkManager::getInstance()->getWirelessDevice();
+	NDBusDevice *dev = NDBusTools::getInstance()->getWirelessDevice();
+
 	if (dev) {
-		static_cast<NNetworkSSIDListForm *>(_wirelessNetworkListForm)->updateNetworkList(
-			dev->getNetworks());
+		dev->update();
+		static_cast<NNetworkSSIDListForm *>(_wirelessNetworkListForm)->updateNetworkList(dev);
 	}
 
 	_wirelessNetworkListForm->show();
@@ -234,14 +233,14 @@ void NSetupWizardManager::createDeviceInfoForm(QWidget *form)
 	}
 
 	static_cast<NDeviceInformation *>(_deviceInfoForm)->updateDeviceInfo(
-		NNetworkManager::getInstance()->getActiveDevice());
+		NDBusTools::getInstance()->getActiveDevice());
 
 	_deviceInfoForm->show();
 
 	lowerForm(form);
 }
 
-void NSetupWizardManager::createNetworkInfoForm(QWidget *form, NNetwork *net)
+void NSetupWizardManager::createNetworkInfoForm(QWidget *form, NDBusNetwork *net)
 {
 	if (!net)
 		return;
@@ -261,7 +260,7 @@ void NSetupWizardManager::createNetworkInfoForm(QWidget *form, NNetwork *net)
 	lowerForm(form);
 }
 
-void NSetupWizardManager::createSelectIPMethodForm(QWidget *form, NNetwork *net)
+void NSetupWizardManager::createSelectIPMethodForm(QWidget *form, NDBusNetwork *net)
 {
 	if (_selectipmethodForm == NULL) {
 		_selectipmethodForm = new NSelectIPMethodForm();
@@ -279,7 +278,7 @@ void NSetupWizardManager::createSelectIPMethodForm(QWidget *form, NNetwork *net)
 	Q_UNUSED(net);
 }
 
-void NSetupWizardManager::createInputSSIDPasswordForm(QWidget *form, NNetwork *net)
+void NSetupWizardManager::createInputSSIDPasswordForm(QWidget *form, NDBusNetwork *net)
 {
 	if (!net)
 		return;
@@ -289,8 +288,8 @@ void NSetupWizardManager::createInputSSIDPasswordForm(QWidget *form, NNetwork *n
 		_inputssidpasswordForm->resize(QApplication::desktop()->size());
 		connect(_inputssidpasswordForm, SIGNAL(quit(QWidget *)),
 				this, SLOT(raiseForm(QWidget *)));
-		connect(_inputssidpasswordForm, SIGNAL(createConnect2NetworkForm(QWidget *, NNetwork *)),
-				this, SLOT(createConnect2NetworkForm(QWidget *, NNetwork *)));
+		connect(_inputssidpasswordForm, SIGNAL(createConnect2NetworkForm(QWidget *, NDBusNetwork *)),
+				this, SLOT(createConnect2NetworkForm(QWidget *, NDBusNetwork *)));
 	}
 
 	static_cast<NInputSSIDPasswordForm *>(_inputssidpasswordForm)->setNetwork(net);
@@ -299,7 +298,7 @@ void NSetupWizardManager::createInputSSIDPasswordForm(QWidget *form, NNetwork *n
 	lowerForm(form);
 }
 
-void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NNetwork *net)
+void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NDBusNetwork *net)
 {
 	NInputSSIDPasswordForm *passwordForm = static_cast<NInputSSIDPasswordForm *>(form);
 
@@ -318,7 +317,11 @@ void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NNetwork *net
 			return;
 		} else if (type == WepASCII) {
 
-			NEncryption *enc = new NEncryptionWEP(NEncryptionWEP::WEP_ASCII);
+			startConnecting();
+
+			NDBusStateTools::getInstance()->switchState(NDBusStateTools::Wake);
+
+			NDBusEncryption *enc = new NDBusEncryptionWEP(NDBusEncryptionWEP::WEP_ASCII);
 			enc->setSecret(passwordForm->password());
 			net->setEncryption(enc);
 
@@ -328,23 +331,18 @@ void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NNetwork *net
 
 	}
 
-	_iAmConnecting = false;
-	startConnecting();
-
 	lowerForm(form);
 }
 
 void NSetupWizardManager::startConnecting()
 {
-	if (_tools.getState()->isSleeping())
-		_tools.getState()->setOfflineMode(false);
-
-	if (!_tools.getState()->isWirelessEnabled())
-		_tools.getState()->setWirelessState(true);
-
 	if (_connectingForm == NULL) {
 		_connectingForm = new NConnectingForm();
         _connectingForm->resize(QApplication::desktop()->size());
+
+		connect(_connectingForm, SIGNAL(connected()), this, SLOT(connected()));
+		connect(_connectingForm, SIGNAL(disconnected()), this, SLOT(disconnected()));
+
 		connect(_connectingForm, SIGNAL(stopConnecting(QWidget *)), this,
 				SLOT(stopConnecting(QWidget *)));
 	} else {
@@ -357,23 +355,23 @@ void NSetupWizardManager::startConnecting()
 void NSetupWizardManager::stopConnecting(QWidget *form)
 {
 	if (form) {
-        _iAmConnecting = false;
 
 		raiseForm(form);
-        _tools.getState()->setWirelessState(false);
+		NDBusStateTools::getInstance()->switchState(NDBusStateTools::Sleep);
 	}
 }
 
 bool NSetupWizardManager::isLanDetected() const
 {
-	NDeviceList list = NNetworkManager::getInstance()->getDevices();
-	for (int i=0; i<list.count(); i++) {
-		if (list.at(i)->isWired() && list.at(i)->getLinkActive() == true) {
-			return true;
-		}
-	}
+	NDBusTools::getInstance()->update();
+	NDBusDevice *dev = NDBusTools::getInstance()->getWiredDevice();
 
-	return false;
+	if (!dev)
+		return false;
+
+	dev->update();
+
+	return dev->isActive();
 }
 
 NSetupWizardManager::encryptType NSetupWizardManager::safeCheckPassword(const QString &passwd,
@@ -405,16 +403,9 @@ bool NSetupWizardManager::isHex(const QString &num) const
 	return true;
 }
 
-void NSetupWizardManager::connecting()
-{
-	_iAmConnecting = true;
-	startConnecting();
-}
-
 void NSetupWizardManager::connected()
 {
-	if (_connectingForm && _iAmConnecting) {
-		static_cast<NConnectingForm *>(_connectingForm)->stopTimer();
+	if (_connectingForm) {
 
 		QMessageBox::information(_connectingForm, tr("Congratulations"), tr("Congratulations! Your TVPC succeeds to connect to network."));
 
@@ -424,8 +415,7 @@ void NSetupWizardManager::connected()
 
 void NSetupWizardManager::disconnected()
 {
-	if (_connectingForm && _iAmConnecting) {
-		static_cast<NConnectingForm *>(_connectingForm)->stopTimer();
+	if (_connectingForm) {
 
 		QMessageBox::information(_connectingForm, tr("Sorry"), tr("Unable to connect to network."));
 

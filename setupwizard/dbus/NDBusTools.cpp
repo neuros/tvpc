@@ -23,6 +23,16 @@ NDBusTools *NDBusTools::getInstance()
 	return _dbus_tools;
 }
 
+NDBusDevice *NDBusTools::getWiredDevice()
+{
+	for (int i=0; i<_device_list.count(); i++) {
+		if (_device_list.at(i)->isWired())
+			return _device_list.at(i);
+	}
+
+	return NULL;
+}
+
 NDBusDevice *NDBusTools::getWirelessDevice()
 {
 	for (int i=0; i<_device_list.count(); i++) {

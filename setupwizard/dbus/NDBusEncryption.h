@@ -2,7 +2,6 @@
 #define _NDBUS_ENCRYPTION_H__
 #include <QList>
 #include <QString>
-#include <NetworkManager/NetworkManager.h>
 #include <iwlib.h>
 #include <NetworkManager/cipher.h>
 #include <NetworkManager/cipher-wep-ascii.h>
@@ -10,7 +9,6 @@
 #include <NetworkManager/cipher-wep-passphrase.h>
 #include <NetworkManager/cipher-wpa-psk-hex.h>
 #include <NetworkManager/cipher-wpa-psk-passphrase.h>
-#include <NetworkManager/dbus-helpers.h>
 #include <QDBusMessage>
 class NDBusNetwork;
 

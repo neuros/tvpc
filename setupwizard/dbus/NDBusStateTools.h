@@ -1,8 +1,8 @@
 #ifndef _NDBUS_STATE_TOOLS_H__
 #define _NDBUS_STATE_TOOLS_H__
 #include <QtDBus/QtDBus>
-#include <NetworkManager.h>
 #include <QObject>
+#include <NetworkManager.h>
 
 class NDBusStateTools : QObject
 {

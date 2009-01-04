@@ -165,7 +165,7 @@ bool NDBusEncryptionWEP::serialize (QDBusMessage& msg, const QString & essid)
 		" method: " << _method << endl;
 
 	if (isValid(essid) == false)
-		return status;
+		return false;
 
 	if (_secret.isEmpty()) {
 		if (essid.isEmpty())
@@ -184,9 +184,6 @@ bool NDBusEncryptionWEP::serialize (QDBusMessage& msg, const QString & essid)
 		}
 
 		if (fake_cipher) {
-
-			char *key = ieee_802_11_cipher_hash(fake_cipher, essid.toUtf8().data(),
-												 _secret.toUtf8().data());
 
 			msg.setArguments(QList<QVariant>() << qVariantFromValue(_network->getObjectPath())
 							 << essid

@@ -1,4 +1,5 @@
 #include "nnetworkinfo.h"
+#include <NetworkManager.h>
 
 NNetworkInfoForm::NNetworkInfoForm(QWidget *parent)
 	:QWidget(parent)
@@ -11,7 +12,7 @@ NNetworkInfoForm::~NNetworkInfoForm()
 
 }
 
-void NNetworkInfoForm::updateNetworkInfo(NNetwork *net)
+void NNetworkInfoForm::updateNetworkInfo(NDBusNetwork *net)
 {
 	if (!net)
 		return;

@@ -82,11 +82,6 @@ void NDBusDevice::setDriver(const QString &driver)
 
 }
 
-const QString NDBusDevice::getDriver() const
-{
-	return d->driver;
-}
-
 const QString NDBusDevice::getActiveNetworkPath() const
 {
 	return d->active_net_path;
@@ -104,6 +99,29 @@ void NDBusDevice::setType (uint type)
 	d->type = static_cast<NMDeviceType>(type);
 	qDebug() << "d->type = " << type;
 
+}
+
+const QString NDBusDevice::getProduct () const
+{
+	// unsupport
+	return "Unknown";
+}
+
+void NDBusDevice::setVendor (const QString & vendor)
+{
+	// unsupport
+}
+
+const QString NDBusDevice::getVendor () const
+{
+	// unsupport
+	return "Unknown";
+}
+
+const QString NDBusDevice::getDriver () const
+{
+	// unsupport
+	return "Unknown";
 }
 
 void NDBusDevice::setUdi (const QString & udi)
@@ -404,10 +422,6 @@ bool NDBusDevice::activeNetwork(NDBusNetwork *net)
 			enc->serialize(msg, net->getEssid());
 
 		msg = iface.callWithArgumentList(QDBus::BlockWithGui, "setActiveDevice", msg.arguments());
-		//if (reply.isValid()) {
-			//qDebug() << "Valid";
-		//}
-		//qDebug() << reply.value();
 	}
 
 	fprintf(stderr, "%s\n",

@@ -1,7 +1,6 @@
 #ifndef _NDBUS_TOOLS_H__
 #define _NDBUS_TOOLS_H__
 #include <QtDBus/QtDBus>
-#include <NetworkManager.h>
 #include <QObject>
 #include <QDBusObjectPath>
 #include "NDBusDevice.h"
@@ -16,6 +15,7 @@ public:
 	static NDBusTools *getInstance();
 
 	const NDBusDeviceList getDevices();
+	NDBusDevice *getWiredDevice(void);
 	NDBusDevice *getWirelessDevice(void);
 	NDBusDevice *getActiveDevice(void);
 	NDBusDevice *getDevice(const QDBusObjectPath&);

@@ -2,7 +2,7 @@
 #define _NINPUT_SSID_PASSWORD_H__
 #include "ui_ninputssidpassword.h"
 #include <QKeyEvent>
-#include <dbus/NNetwork.h>
+#include "NDBusNetwork.h"
 
 
 class NInputSSIDPasswordForm : public QWidget, private Ui::NInputSSIDPasswordForm
@@ -11,7 +11,7 @@ class NInputSSIDPasswordForm : public QWidget, private Ui::NInputSSIDPasswordFor
 public:
 	NInputSSIDPasswordForm(QWidget *parent = 0);
 	~NInputSSIDPasswordForm();
-	void setNetwork(NNetwork *);
+	void setNetwork(NDBusNetwork *);
 
 	const QString password() const;
 	void clearPassword();
@@ -21,10 +21,10 @@ protected:
 public slots:
 signals:
 	void quit(QWidget *);
-	void createConnect2NetworkForm(QWidget *, NNetwork *);
+	void createConnect2NetworkForm(QWidget *, NDBusNetwork *);
 
 private:
-	NNetwork *_net;
+	NDBusNetwork *_net;
 };
 
 #endif /* _NINPUT_SSID_PASSWORD_H__ */

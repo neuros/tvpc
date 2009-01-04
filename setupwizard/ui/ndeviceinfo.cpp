@@ -11,7 +11,7 @@ NDeviceInformation::~NDeviceInformation()
 
 }
 
-void NDeviceInformation::updateDeviceInfo(NDevice *dev)
+void NDeviceInformation::updateDeviceInfo(NDBusDevice *dev)
 {
 	if (!dev)
 		return;

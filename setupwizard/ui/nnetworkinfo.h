@@ -1,7 +1,7 @@
 #ifndef _NNETWORK_INFO_H__
 #define _NNETWORK_INFO_H__
 #include "ui_nnetworkinfo.h"
-#include "dbus/NNetwork.h"
+#include "NDBusNetwork.h"
 #include <QKeyEvent>
 class NNetworkInfoForm : public QWidget, private Ui::NNetworkInfoForm
 {
@@ -10,7 +10,7 @@ public:
 	NNetworkInfoForm(QWidget *parent = 0);
 	~NNetworkInfoForm();
 public slots:
-	void updateNetworkInfo(NNetwork *net);
+	void updateNetworkInfo(NDBusNetwork *net);
 signals:
 	void quit(QWidget *);
 

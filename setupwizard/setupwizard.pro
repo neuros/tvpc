@@ -6,27 +6,11 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += . dbus form ui
 INCLUDEPATH += . dbus ui \
-		/usr/include/glib-2.0 \
-		/usr/lib/glib-2.0/include \
-		/usr/lib/dbus-1.0/include \
-		/usr/include/dbus-1.0 \
-                /usr/local/include/NetworkManager
 
-LIBS += -ldbus-1 -lhal -lnm-util -ldbus-glib-1
-QT+=dbus
+LIBS += -lnm-util
+QT += dbus
 # Input
-HEADERS += dbus/NDBusConnection.h \
-           dbus/NDevice.h \
-           dbus/NDeviceDBusInterface.h \
-           dbus/NEncryption.h \
-           dbus/NNetwork.h \
-           dbus/NNetworkDBusInterface.h \
-           dbus/NNetworkManager.h \
-           dbus/NNetworkManagerDBusInterface.h \
-           dbus/NNetworkManagerInfo.h \
-           dbus/NNetworkState.h \
-           dbus/NNetworkTools.h \
-           dbus/NStateDBusInterface.h \
+HEADERS += dbus/NetworkManager.h \
 	   dbus/NDBusStateTools.h \
 	   dbus/NDBusTools.h \
 	   dbus/NDBusDevice.h \
@@ -57,21 +41,9 @@ FORMS += form/ninsertlan.ui \
 	 form/nselectipmethod.ui \
 	 form/ninputssidpassword.ui \
 	 form/nconnecting.ui
-SOURCES += dbus/NDBusConnection.cpp \
-           dbus/NDevice.cpp \
-           dbus/NDeviceDBusInterface.cpp \
-           dbus/NEncryption.cpp \
-           dbus/NNetwork.cpp \
-           dbus/NNetworkDBusInterface.cpp \
-           dbus/NNetworkManager.cpp \
-           dbus/NNetworkManagerDBusInterface.cpp \
-           dbus/NNetworkManagerInfo.cpp \
-           dbus/NNetworkState.cpp \
-           dbus/NNetworkTools.cpp \
-	   dbus/NDBusTools.cpp \
+SOURCES += dbus/NDBusTools.cpp \
 	   dbus/NDBusDevice.cpp \
 	   dbus/NDBusNetwork.cpp \
-           dbus/NStateDBusInterface.cpp \
 	   dbus/NDBusStateTools.cpp \
 	   dbus/NDBusEncryption.cpp \
            ui/main.cpp \

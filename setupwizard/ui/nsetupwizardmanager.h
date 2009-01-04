@@ -2,7 +2,8 @@
 #define _NSETUP_WIZARD_MANAGER_H__
 #include <QWidget>
 #include <QStack>
-#include "dbus/NNetworkTools.h"
+#include "NDBusTools.h"
+#include "NDBusStateTools.h"
 
 class NSetupWizardManager : public QWidget
 {
@@ -28,12 +29,11 @@ public slots:
 	void createNetworkListForm(QWidget *widget);
 	void createInserLanForm(QWidget *widget);
 	void createDeviceInfoForm(QWidget *widget);
-	void createNetworkInfoForm(QWidget *widget, NNetwork *net);
-	void createSelectIPMethodForm(QWidget *widget, NNetwork *net);
-	void createInputSSIDPasswordForm(QWidget *widget, NNetwork *net);
-	void createConnect2NetworkForm(QWidget *widget, NNetwork *net);
+	void createNetworkInfoForm(QWidget *widget, NDBusNetwork *net);
+	void createSelectIPMethodForm(QWidget *widget, NDBusNetwork *net);
+	void createInputSSIDPasswordForm(QWidget *widget, NDBusNetwork *net);
+	void createConnect2NetworkForm(QWidget *widget, NDBusNetwork *net);
 
-	void connecting();
 	void connected();
 	void disconnected();
 
@@ -52,8 +52,6 @@ private:
 private:
 	static NSetupWizardManager *_manager;
 
-	NNetworkTools _tools;
-
 	QStack<QWidget *> _stackWidget;
 
 	QWidget *_splashForm;
@@ -69,7 +67,6 @@ private:
 	QWidget *_inputssidpasswordForm;
 	QWidget *_connectingForm;
 
-	bool _iAmConnecting;
 };
 
 #endif /* _NSETUP_WIZARD_MANAGER_H__ */

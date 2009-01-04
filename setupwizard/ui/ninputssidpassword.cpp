@@ -13,7 +13,7 @@ NInputSSIDPasswordForm::~NInputSSIDPasswordForm()
 
 }
 
-void NInputSSIDPasswordForm::setNetwork(NNetwork *net)
+void NInputSSIDPasswordForm::setNetwork(NDBusNetwork *net)
 {
 	_net = net;
 }

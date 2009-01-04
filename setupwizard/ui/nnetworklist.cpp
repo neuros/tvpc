@@ -1,5 +1,4 @@
 #include "nnetworklist.h"
-#include "dbus/NNetworkManager.h"
 #include "ndeviceinfo.h"
 #include <QDesktopWidget>
 
@@ -14,7 +13,7 @@ NNetworkSSIDListForm::~NNetworkSSIDListForm()
 
 }
 
-void NNetworkSSIDListForm::updateNetworkList(const NNetworkList &list)
+void NNetworkSSIDListForm::updateNetworkList(const NDBusNetworkList &list)
 {
 	int i;
 	networkList->clear();
@@ -26,20 +25,15 @@ void NNetworkSSIDListForm::updateNetworkList(const NNetworkList &list)
 	if (networkList->count())
 		networkList->setCurrentRow(0);
 
-	if (list.count() > 0) {
-			connect(NNetworkManager::getInstance(), SIGNAL(networkStrengthChange(NNetwork *)),
-					this, SLOT(updateSignalStrength(NNetwork *)));
-	}
-
 	_list = list;
 }
 
-void NNetworkSSIDListForm::updateSignalStrength(NNetwork *net)
+void NNetworkSSIDListForm::updateSignalStrength(NDBusNetwork *net)
 {
 
 }
 
-void NNetworkSSIDListForm::updateNetworkList(NDevice *dev)
+void NNetworkSSIDListForm::updateNetworkList(NDBusDevice *dev)
 {
 	if (!dev)
 		return;
@@ -49,7 +43,7 @@ void NNetworkSSIDListForm::updateNetworkList(NDevice *dev)
 
 void NNetworkSSIDListForm::keyPressEvent(QKeyEvent *e)
 {
-	NNetwork *net = NULL;
+	NDBusNetwork *net = NULL;
 
 	switch (e->key()) {
 	case Qt::Key_Left:

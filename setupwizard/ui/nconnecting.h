@@ -17,11 +17,16 @@ public slots:
 	void on_stopBtn_clicked();
 signals:
 	void stopConnecting(QWidget *);
+
+	void connected();
+	void disconnected();
 private:
 	void setupConnections();
 private:
 	QTimer *timer;
 	int cnt;
+
+	bool iAmConnecting;
 };
 
 #endif /* _NCONNECTING_H__ */
