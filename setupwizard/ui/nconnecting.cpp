@@ -1,8 +1,9 @@
 #include "nconnecting.h"
 #include "NDBusStateTools.h"
+#define MAX_WAIT_TIME 30  // 30s
 
-NConnectingForm::NConnectingForm(QWidget *parent)
-	:QWidget(parent)
+NConnectingForm::NConnectingForm(NDBusNetwork *net, QWidget *parent)
+	:QWidget(parent), _net(net)
 {
 	timer = new QTimer(this);
 	timer->setInterval(1000);
@@ -21,6 +22,11 @@ NConnectingForm::~NConnectingForm()
 void NConnectingForm::setupConnections()
 {
 	connect(timer, SIGNAL(timeout()), this, SLOT(timeOut()));
+}
+
+void NConnectingForm::setNetwork(NDBusNetwork *net)
+{
+	_net = net;
 }
 
 void NConnectingForm::stopTimer()
@@ -42,25 +48,34 @@ void NConnectingForm::on_stopBtn_clicked()
 
 void NConnectingForm::timeOut()
 {
-	if (cnt < 6) {
-		cnt ++;
-		connectLabel->setText(connectLabel->text() + ".");
-	} else {
+	cnt ++;
+
+	if (cnt > MAX_WAIT_TIME) {
 		cnt = 0;
-		connectLabel->setText(connectLabel->text().left(connectLabel->text().length() - 6));
+		stopTimer();
+
+		NDBusStateTools::getInstance()->switchState(NDBusStateTools::Sleep);
+
+		emit disconnected(_net);
+		return;
+	}
+
+	if (cnt % 7)
+		connectLabel->setText(connectLabel->text() + ".");
+	else {
+        connectLabel->setText(connectLabel->text().left(connectLabel->text().length() - 6));
 	}
 	NDBusStateTools::getInstance()->updateNMState();
 
+	qDebug() << NDBusStateTools::getInstance()->stateToString();
+
 	if (iAmConnecting && NDBusStateTools::getInstance()->isDisconnected()) {
 		stopTimer();
-		emit disconnect();
+		emit disconnected(_net);
 	} else if (iAmConnecting && NDBusStateTools::getInstance()->isConnected()) {
 		stopTimer();
-		emit connected();
+		emit connected(_net);
 	} else if (NDBusStateTools::getInstance()->isConnecting()) {
 		iAmConnecting = true;
 	}
-        //NDBusStateTools::getInstance()->isConnecting();
-//	if (!NDBusStateTools::getInstance()->isConnecting())
-		
 }

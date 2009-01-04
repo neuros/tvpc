@@ -11,6 +11,8 @@
 #include "nselectipmethod.h"
 #include "ninputssidpassword.h"
 #include "nconnecting.h"
+#include "nconnectsuccess.h"
+#include "nconnectfail.h"
 
 NSetupWizardManager *NSetupWizardManager::_manager = NULL;
 
@@ -19,7 +21,7 @@ NSetupWizardManager::NSetupWizardManager()
 	_overViewForm(NULL), _wirelessConfigForm(NULL), _wireConfigForm(NULL),
 	_wirelessNetworkListForm(NULL), _insertLanForm(NULL), _deviceInfoForm(NULL),
 	_networkInfoForm(NULL), _selectipmethodForm(NULL), _inputssidpasswordForm(NULL),
-	_connectingForm(NULL)
+	_connectingForm(NULL), _connectSucceedForm(NULL), _connectFailForm(NULL)
 {
 
 	setupConnections();
@@ -51,6 +53,10 @@ NSetupWizardManager::~NSetupWizardManager()
 		delete _inputssidpasswordForm;
 	if (_connectingForm)
 		delete _connectingForm;
+	if (_connectSucceedForm)
+		delete _connectSucceedForm;
+	if (_connectFailForm)
+		delete _connectFailForm;
 }
 
 NSetupWizardManager *NSetupWizardManager::getInstance()
@@ -183,12 +189,14 @@ void NSetupWizardManager::createNetworkListForm(QWidget *form)
 				this, SLOT(createInputSSIDPasswordForm(QWidget *, NDBusNetwork *)));
 	}
 
+	NDBusStateTools::getInstance()->switchState(NDBusStateTools::Wake);
 	NDBusDevice *dev = NDBusTools::getInstance()->getWirelessDevice();
 
 	if (dev) {
 		dev->update();
 		static_cast<NNetworkSSIDListForm *>(_wirelessNetworkListForm)->updateNetworkList(dev);
-	}
+	} else
+		qDebug() << "========NULL Device!========";
 
 	_wirelessNetworkListForm->show();
 
@@ -317,7 +325,7 @@ void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NDBusNetwork 
 			return;
 		} else if (type == WepASCII) {
 
-			startConnecting();
+			startConnecting(net);
 
 			NDBusStateTools::getInstance()->switchState(NDBusStateTools::Wake);
 
@@ -334,18 +342,19 @@ void NSetupWizardManager::createConnect2NetworkForm(QWidget *form, NDBusNetwork 
 	lowerForm(form);
 }
 
-void NSetupWizardManager::startConnecting()
+void NSetupWizardManager::startConnecting(NDBusNetwork *net)
 {
 	if (_connectingForm == NULL) {
-		_connectingForm = new NConnectingForm();
+		_connectingForm = new NConnectingForm(net);
         _connectingForm->resize(QApplication::desktop()->size());
 
-		connect(_connectingForm, SIGNAL(connected()), this, SLOT(connected()));
-		connect(_connectingForm, SIGNAL(disconnected()), this, SLOT(disconnected()));
+		connect(_connectingForm, SIGNAL(connected(NDBusNetwork *)), this, SLOT(connected(NDBusNetwork *)));
+		connect(_connectingForm, SIGNAL(disconnected(NDBusNetwork *)), this, SLOT(disconnected(NDBusNetwork *)));
 
 		connect(_connectingForm, SIGNAL(stopConnecting(QWidget *)), this,
 				SLOT(stopConnecting(QWidget *)));
 	} else {
+		static_cast<NConnectingForm *>(_connectingForm)->setNetwork(net);
 		static_cast<NConnectingForm *>(_connectingForm)->startTimer();
 	}
 
@@ -355,8 +364,8 @@ void NSetupWizardManager::startConnecting()
 void NSetupWizardManager::stopConnecting(QWidget *form)
 {
 	if (form) {
-
 		raiseForm(form);
+
 		NDBusStateTools::getInstance()->switchState(NDBusStateTools::Sleep);
 	}
 }
@@ -403,24 +412,52 @@ bool NSetupWizardManager::isHex(const QString &num) const
 	return true;
 }
 
-void NSetupWizardManager::connected()
+void NSetupWizardManager::connected(NDBusNetwork *net)
 {
-	if (_connectingForm) {
+	if (_connectingForm && net) {
 
-		QMessageBox::information(_connectingForm, tr("Congratulations"), tr("Congratulations! Your TVPC succeeds to connect to network."));
+		if (_connectSucceedForm == NULL) {
+			_connectSucceedForm = new NConnectSuccessForm();
+			_connectSucceedForm->resize(QApplication::desktop()->size());
 
+			connect(_connectSucceedForm, SIGNAL(quit(QWidget *)),
+					this, SLOT(raiseForm(QWidget *)));
+
+		}
+		_connectSucceedForm->show();
 		_connectingForm->hide();
 	}
 }
 
-void NSetupWizardManager::disconnected()
+void NSetupWizardManager::disconnected(NDBusNetwork *net)
 {
-	if (_connectingForm) {
+	if (_connectingForm && net) {
 
-		QMessageBox::information(_connectingForm, tr("Sorry"), tr("Unable to connect to network."));
+		if (_connectFailForm == NULL) {
+			_connectFailForm = new NConnectFailForm(net);
+			_connectFailForm->resize(QApplication::desktop()->size());
 
-		_connectingForm->hide();
+			connect(_connectFailForm, SIGNAL(quit(QWidget *)),
+					this, SLOT(raiseForm(QWidget *)));
+			connect(_connectFailForm, SIGNAL(tryAgain(QWidget *, NDBusNetwork *)),
+					this, SLOT(tryAgain(QWidget *, NDBusNetwork *)));
+			connect(_connectFailForm, SIGNAL(gotoNext(QWidget *)),
+					this, SLOT(gotoNext(QWidget  *)));
+		}
+
+		_connectFailForm->show();
+        _connectingForm->hide();
 	}
+}
+
+void NSetupWizardManager::tryAgain(QWidget *form, NDBusNetwork *net)
+{
+	createConnect2NetworkForm(_inputssidpasswordForm, net);
+}
+
+void NSetupWizardManager::gotoNext(QWidget *form)
+{
+
 }
 
 

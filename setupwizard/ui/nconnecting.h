@@ -1,14 +1,17 @@
 #ifndef _NCONNECTING_H__
 #define _NCONNECTING_H__
 #include "ui_nconnecting.h"
+#include "NDBusNetwork.h"
 #include <QTimer>
 
 class NConnectingForm : public QWidget, private Ui::NConnectingForm
 {
 	Q_OBJECT
 public:
-	NConnectingForm(QWidget *parent = 0);
+	NConnectingForm(NDBusNetwork *net, QWidget *parent = 0);
 	~NConnectingForm();
+
+	void setNetwork(NDBusNetwork *net);
 
 	void stopTimer();
 	void startTimer();
@@ -18,8 +21,8 @@ public slots:
 signals:
 	void stopConnecting(QWidget *);
 
-	void connected();
-	void disconnected();
+	void connected(NDBusNetwork *);
+	void disconnected(NDBusNetwork *);
 private:
 	void setupConnections();
 private:
@@ -27,6 +30,7 @@ private:
 	int cnt;
 
 	bool iAmConnecting;
+	NDBusNetwork *_net;
 };
 
 #endif /* _NCONNECTING_H__ */

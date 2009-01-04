@@ -34,15 +34,18 @@ public slots:
 	void createInputSSIDPasswordForm(QWidget *widget, NDBusNetwork *net);
 	void createConnect2NetworkForm(QWidget *widget, NDBusNetwork *net);
 
-	void connected();
-	void disconnected();
+	void connected(NDBusNetwork *);
+	void disconnected(NDBusNetwork *);
 
 	void stopConnecting(QWidget *widget);
+
+	void tryAgain(QWidget *, NDBusNetwork *);
+	void gotoNext(QWidget *);
 
 	void lowerForm(QWidget *);
 	void raiseForm(QWidget *);
 private:
-	void startConnecting();
+	void startConnecting(NDBusNetwork *);
 	bool isLanDetected() const;
 	bool isHex(const QString &num) const;
 	NSetupWizardManager::encryptType safeCheckPassword(
@@ -66,7 +69,8 @@ private:
 	QWidget *_selectipmethodForm;
 	QWidget *_inputssidpasswordForm;
 	QWidget *_connectingForm;
-
+	QWidget *_connectSucceedForm;
+	QWidget *_connectFailForm;
 };
 
 #endif /* _NSETUP_WIZARD_MANAGER_H__ */

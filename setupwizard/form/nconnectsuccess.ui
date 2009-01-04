@@ -1,0 +1,112 @@
+<ui version="4.0" >
+ <class>NConnectSuccessForm</class>
+ <widget class="QWidget" name="NConnectSuccessForm" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>769</width>
+    <height>549</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Connect Success</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="1" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>133</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" >
+    <spacer name="horizontalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>42</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QLabel" name="label" >
+     <property name="font" >
+      <font>
+       <pointsize>25</pointsize>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Congratulations, you Connection succeeded!</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" >
+    <spacer name="horizontalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>41</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="1" >
+    <spacer name="verticalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>134</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QPushButton" name="continueBtn" >
+     <property name="font" >
+      <font>
+       <pointsize>25</pointsize>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Continue to next setup step</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <spacer name="verticalSpacer_3" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>133</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
