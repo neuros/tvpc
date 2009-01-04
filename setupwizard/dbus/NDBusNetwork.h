@@ -3,6 +3,7 @@
 #include <QtDBus/QtDBus>
 #include <QObject>
 #include <NetworkManager.h>
+#include "NDBusEncryption.h"
 
 class NDBusDevice;
 class NDBusNetworkPrivate;
@@ -21,6 +22,8 @@ public:
     const QDBusObjectPath		getObjectPath(void) const;
 	const QString     getEssid(void) const;
 	const QString     getHardwareAddress(void) const;
+	NDBusEncryption* getEncryption (void) const;
+	void	setEncryption (NDBusEncryption*);
 
 	double      getFrequency(void) const;
 	int		getStrength(void) const;
@@ -47,6 +50,8 @@ private:
 
 private:
 	QDBusObjectPath _path;
+
+	NDBusEncryption *_encryption;
 
 	NDBusDevice *_dev;
 

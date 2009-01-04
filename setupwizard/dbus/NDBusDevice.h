@@ -21,7 +21,8 @@ public:
 	NDBusNetworkList getNetworks(void) const;
 	NDBusNetwork *getActiveNetwork(void) const;
 	NDBusNetwork *getNetwork(const QDBusObjectPath &) const;
-	void activeNetwork(NDBusNetwork *net);
+	NDBusNetwork *getNetwork(const QString &essid) const;
+	bool activeNetwork(NDBusNetwork *net);
 
 
 	const QString      getInterface        (void) const;

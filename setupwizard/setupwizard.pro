@@ -31,6 +31,7 @@ HEADERS += dbus/NDBusConnection.h \
 	   dbus/NDBusTools.h \
 	   dbus/NDBusDevice.h \
 	   dbus/NDBusNetwork.h \
+	   dbus/NDBusEncryption.h \
            ui/ninsertlan.h \
            ui/noverview.h \
            ui/nselectmode.h \
@@ -72,6 +73,7 @@ SOURCES += dbus/NDBusConnection.cpp \
 	   dbus/NDBusNetwork.cpp \
            dbus/NStateDBusInterface.cpp \
 	   dbus/NDBusStateTools.cpp \
+	   dbus/NDBusEncryption.cpp \
            ui/main.cpp \
            ui/ninsertlan.cpp \
            ui/noverview.cpp \

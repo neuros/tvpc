@@ -22,6 +22,22 @@ public:
 	bool       hidden;
 };
 
+NDBusNetwork::NDBusNetwork(const QDBusObjectPath &path, NDBusDevice *dev)
+	: QObject(), _path(path), _dev(dev)
+{
+	n = new NDBusNetworkPrivate;
+
+	_encryption = new NDBusEncryptionNone ();
+
+	_encryption->setNetwork(this);
+}
+
+NDBusNetwork::~NDBusNetwork()
+{
+	delete n;
+	delete _encryption;
+}
+
 void NDBusNetwork::setObjectPath (const QString & obj_path)
 {
 	qDebug() << "n->obj_path = " << obj_path;
@@ -179,16 +195,19 @@ NDBusDevice *NDBusNetwork::getDevice() const
 {
 	return _dev;
 }
-
-NDBusNetwork::NDBusNetwork(const QDBusObjectPath &path, NDBusDevice *dev)
-	: QObject(), _path(path), _dev(dev)
+NDBusEncryption* NDBusNetwork::getEncryption (void) const
 {
-	n = new NDBusNetworkPrivate;
+	return _encryption;
 }
 
-NDBusNetwork::~NDBusNetwork()
+void NDBusNetwork::setEncryption (NDBusEncryption* encryption)
 {
-	delete n;
+	if (_encryption)
+		delete _encryption;
+
+	_encryption = encryption;
+	if ( _encryption )
+		_encryption->setNetwork(this);
 }
 
 bool NDBusNetwork::update()

@@ -336,6 +336,20 @@ NDBusNetwork *NDBusDevice::getNetwork(const QDBusObjectPath &obj_path) const
 	return NULL;
 }
 
+NDBusNetwork *NDBusDevice::getNetwork(const QString &essid) const
+{
+	if (d->networks.isEmpty ())
+		return NULL;
+
+	NDBusNetworkList::const_iterator iterator;
+
+	for (iterator= d->networks.constBegin (); iterator != d->networks.constEnd (); ++iterator)
+		if ((*iterator)->getEssid () == essid)
+			return *iterator;
+
+	return NULL;
+}
+
 NDBusNetwork *NDBusDevice::getActiveNetwork() const
 {
 	if (d->networks.isEmpty())
@@ -349,12 +363,6 @@ NDBusNetwork *NDBusDevice::getActiveNetwork() const
 
 	return NULL;
 }
-
-void NDBusDevice::activeNetwork(NDBusNetwork *net)
-{
-	//NDeviceDBusInterface::setActiveNetwork(net, this);
-}
-
 
 unsigned int NDBusDevice::getCapabilitiesType () const
 {
@@ -374,6 +382,38 @@ bool NDBusDevice::isWired () const
 bool NDBusDevice::isValid() const
 {
 	return _path.path().isEmpty();
+}
+
+bool NDBusDevice::activeNetwork(NDBusNetwork *net)
+{
+	if (!net)
+		return false;
+
+	if (NDBusStateTools::getInstance()->isSystemBusConnected() == false)
+		return false;
+
+	NDBusEncryption *enc = net->getEncryption();
+
+	QDBusInterface iface(NM_DBUS_SERVICE, NM_DBUS_PATH, NM_DBUS_INTERFACE,
+						 QDBusConnection::systemBus());
+
+	if (iface.isValid()) {
+		QDBusMessage msg;
+
+		if (enc)
+			enc->serialize(msg, net->getEssid());
+
+		msg = iface.callWithArgumentList(QDBus::BlockWithGui, "setActiveDevice", msg.arguments());
+		//if (reply.isValid()) {
+			//qDebug() << "Valid";
+		//}
+		//qDebug() << reply.value();
+	}
+
+	fprintf(stderr, "%s\n",
+			qPrintable(QDBusConnection::systemBus().lastError().message()));
+
+	return false;
 }
 
 bool NDBusDevice::update()
